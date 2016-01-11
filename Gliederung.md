@@ -6,6 +6,7 @@
 
 ## example
 ```rust
+#[allow(dead_code)]
 enum Coffee {
 	Hot(u8), 		// test
 	Iced(bool), // still has ice
@@ -14,6 +15,7 @@ enum Coffee {
 
 fn main(){
 	let foo = "bar";
+	println!("this was printed in rust")
 }
 ```
 
