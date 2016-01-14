@@ -2,61 +2,57 @@
 % astro und hoodie
 % January 11, 2016
 
-# Introduction
+# Was ist Rust?
 
-## example
-```rust
-#[allow(dead_code)]
-enum Coffee {
-	Hot(u8), 		// test
-	Iced(bool), // still has ice
-	Instant
-}
+## existiert seit
 
-fn main(){
-	let foo = "bar";
-	println!("this was printed in rust")
-}
-```
+* developed @mozilla since ~2007
+* stable since May 2015
 
-## History
+## Rust powers:
 
-* originally conceived by Graydon Hoare *(nicht Charles Antony Richard Hoare)*
+* Servo *(super cool fast browser engine)*
+* machine learning tools ( [leaf](https://github.com/autumnai/leaf), [rustlearn](https://github.com/maciejkula/rustlearn))
+* safe parsers ([nom](https://github.com/Geal/nom))
+* [seL4 stack](https://robigalia.org/)
+* everything else
 
-## Development
+# Vergleiche
 
-* Lang by Mozilla Re, used in next-gen browser-engine *Servo*
-* developed since ~2007
-* uses LLVM toolchain
-* type system based on Hindley-Milner type system (similar to Haskell)
-* stdlib intended for concurrent and memory safety (`Arc`, `Mutex`)
-* stdlib and syntax fixed since May 2015
+## Rust ist wie ...
 
-## Cool Stuff
+* ... c++
+* ... haskell
+* ... ruby
+* ... python
 
-* pattern matching
-* expressions vs statements
-* closures
-* macros
-* documentation comments
-* in-line tests `#[test]` and benchmarks `#[bench]`
+## wie c++
 
-# Original Advertisement
+* statisch kompiliert ( LLVM )
+* scheiße schnell
+* zero cost abstractions
+* kein garbage-collector
+* **low level**
 
-## foo
+## wie haskell
 
-* [website arguments](https://rust-lang.org)
-* zero-cost abstractions
-* move semantics
-* guaranteed memory safety
-* threads without data races
-* trait-based generics
-* pattern matching
-* type inference
-* minimal runtime
-* efficient C bindings
+* streng getypt
+* Hindley-Milner type system
+* immutable variables
 
-## [influence](http://doc.rust-lang.org/reference.html#appendix-influences)
+## wie ruby oder python
+
+* expressive Syntax
+* gut zu lesen
+* build system und Packetmanager (cargo & crates.io)
+
+## wie rust!
+
+* **borrow checker**
+
+---
+
+## Einflüße
 
 * **SML, OCaml:** algebraic data types, pattern matching, type inference, semicolon statement separation
 * **C++:** references, RAII, smart pointers, move semantics, monomorphization, memory model
@@ -64,71 +60,66 @@ fn main(){
 * **Haskell (GHC):** typeclasses, type families
 * **Newsqueak, Alef, Limbo:** channels, concurrency
 * **Erlang:** message passing, thread failure
+
+## Einflüße 2
 * **Swift:** optional bindings
 * **Scheme:** hygienic macros
 * **C#:** attributes
 * **Unicode Annex #31:** identifier and pattern syntax
 
+siehe: [influence](http://doc.rust-lang.org/reference.html#appendix-influences)
 
-# details
+# Features
 
-## [advantages to c++](http://graydon.livejournal.com/220853.html)
+## Sicherheit
 
-## What Rust shipped without
+* guaranteed memory safety
+* threads without data races
 
-*  null pointers
-*  array overruns
-*  data races
-*  wild pointers
-*  uninitialized, yet addressable memory
-*  unions that allow access to the wrong field
+* move semantics
+* Type inference
+* Typsicherheit zur compile time -> no implicit coercions/casting
 
-## Less-well-known things I'm very proud that rust shipped 1.0 without:
+## Leistung
 
-* a shared root namespace
-* variables with runtime "before main" static initialization (the .ctors section)
-* a compilation model that relies on textual inclusion (#include) or textual elision (</tt>#ifdef</tt>)
-* a compilation model that relies on the order of declarations (possible caveat: macros)
-* accidental identifier capture in macros
-* random-access strings
-* UTF-16 or UCS-2 support anywhere outside windows API compatibility routines
-* signed character types
-* (hah! vertical tab escapes (as recently discussed) along with the escapes for bell and form-feed)
-* "accidental octal" from leading zeroes
-* goto (not even as a reserved word)
-* dangling else (or misgrouped control structure bodies of any sort)
-* case fallthrough
-* a == operator you can easily typo as = and still compile
-* a === operator, or any set of easily-confused equality operators
-* silent coercions between boolean and anything else
-* silent coercions between enums and integers
-* silent arithmetic coercions, promotions
-* implementation-dependent sign for the result of % with negative dividend
-* bitwise operators with lower precedence than comparison operators
-* auto-increment operators
-* a poor-quality default hash function
-* pointer-heavy default containers
+* zero-cost abstractions
+* minimal runtime
+* efficient C bindings
 
+## Sprache
 
+* trait-based generics
+* pattern matching
+* hygienische macros
+* expressions und statements
+* closures
+* Beispiele folgen
+
+## Ökosystem
+
+* Dokumentation ist TopPriority
+* in-line Tests und Benchmarks (`#[test]` und `#[bench]`)
+* cargo kompiliert, dokumentiert, testet, benchmarkt und publisht
+
+# Details
 
 ## Memory Model
 
-* no garbage collection, low level access possible
-* variables immutable by default
-* real innovation: **borrow checker** -> enforces Ownership and Move Semantics
+* kein GarbageCollector
+* keine manuelle Speicherverwaltung
+* **borrow checker** forciert Ownership and Move Semantics
+
+## Wie jetzt?
+
 * a reference to a resource is "borrowed"
 * only one party can mutate resources
 * Move Semantics are implicitly part of the language
 * there is one concrete owner to everything
 * racing code would not even compile
 
-## Type System
+# here be dragons
 
-* Type safety at compile time -> no implicit coercions/casting
-
-```rust
-/// Example of Enums and Structs here
-```
+## der rest ist unsortiert
 
 * Traits vs Object Orientation -> composition vs inheritance
 * Trait based Generics vs Templates -> no ducktyping in "template" expansions

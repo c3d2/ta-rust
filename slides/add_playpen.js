@@ -20,7 +20,7 @@ Array.prototype.forEach.call(elements, function(el) {
     event.preventDefault();
     runProgram(code, function(statcode,result){
       //alert(result);
-      $(el).append("<hr/><code>");
+      $(el).append("<hr/><code style=\"color:#f00\">");
       $(el).append(result);
       $(el).append("</code>");
     })

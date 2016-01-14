@@ -18,7 +18,6 @@ $endif$
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
   <link rel="stylesheet" href="$revealjs-url$/css/reveal.css">
-  <style type="text/css">code{white-space: pre;}</style>
 $if(quotes)$
   <style type="text/css">q { quotes: "“" "”" "‘" "’"; }</style>
 $endif$
@@ -30,11 +29,18 @@ $endif$
 $if(theme)$
   <link rel="stylesheet" href="$revealjs-url$/css/theme/$theme$.css" id="theme">
 $else$
-  <link rel="stylesheet" href="$revealjs-url$/css/theme/moon.css" id="theme">
+  <link rel="stylesheet" href="$revealjs-url$/css/theme/beige.css" id="theme">
 $endif$
 $for(css)$
   <link rel="stylesheet" href="$css$"/>
 $endfor$
+  <style type="text/css">
+code{white-space: pre;}
+code .playpen_result{
+  font-size:0.6em;
+  color:#f00 !important;
+}
+  </style>
   <!-- Printing and PDF exports -->
   <script>
     var link = document.createElement( 'link' );

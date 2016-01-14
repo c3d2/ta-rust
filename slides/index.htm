@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta foo="bar">
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="astro und hoodie">
+  <meta name="dcterms.date" content="2016-01-11">
+  <title>Rust Themenabend</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="reveal.js/css/theme/sky.css" id="theme">
+  <style type="text/css">
+code{white-space: pre;}
+code .playpen_result{
+  font-size:0.6em;
+  color:#f00 !important;
+}
+  </style>
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+  <!--[if lt IE 9]>
+  <script src="reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+  <h1 class="title">Rust Themenabend</h1>
+  <h2 class="author">astro und hoodie</h2>
+  <h3 class="date">January 11, 2016</h3>
+</section>
+
+<section><section id="was-ist-rust" class="titleslide slide level1"><h1>Was ist Rust?</h1></section><section id="existiert-seit" class="slide level2">
+<h1>existiert seit</h1>
+<ul>
+<li>developed <span class="citation" data-cites="mozilla">@mozilla</span> since ~2007</li>
+<li>stable since May 2015</li>
+</ul>
+</section><section id="rust-powers" class="slide level2">
+<h1>Rust powers:</h1>
+<ul>
+<li>Servo <em>(super cool fast browser engine)</em></li>
+<li>machine learning tools ( <a href="https://github.com/autumnai/leaf">leaf</a>, <a href="https://github.com/maciejkula/rustlearn">rustlearn</a>)</li>
+<li>safe parsers (<a href="https://github.com/Geal/nom">nom</a>)</li>
+<li><a href="https://robigalia.org/">seL4 stack</a></li>
+<li>everything else</li>
+</ul>
+</section></section>
+<section><section id="vergleiche" class="titleslide slide level1"><h1>Vergleiche</h1></section><section id="rust-ist-wie-..." class="slide level2">
+<h1>Rust ist wie ...</h1>
+<ul>
+<li>... c++</li>
+<li>... haskell</li>
+<li>... ruby</li>
+<li>... python</li>
+</ul>
+</section><section id="wie-c" class="slide level2">
+<h1>wie c++</h1>
+<ul>
+<li>statisch kompiliert ( LLVM )</li>
+<li>scheiße schnell</li>
+<li>zero cost abstractions</li>
+<li>kein garbage-collector</li>
+<li><strong>low level</strong></li>
+</ul>
+</section><section id="wie-haskell" class="slide level2">
+<h1>wie haskell</h1>
+<ul>
+<li>streng getypt</li>
+<li>Hindley-Milner type system</li>
+<li>immutable variables</li>
+</ul>
+</section><section id="wie-ruby-oder-python" class="slide level2">
+<h1>wie ruby oder python</h1>
+<ul>
+<li>expressive Syntax</li>
+<li>gut zu lesen</li>
+<li>build system und Packetmanager (cargo &amp; crates.io)</li>
+</ul>
+</section><section id="wie-rust" class="slide level2">
+<h1>wie rust!</h1>
+<ul>
+<li><strong>borrow checker</strong></li>
+</ul>
+</section><section id="einflüße" class="slide level2">
+<h1>Einflüße</h1>
+<ul>
+<li><strong>SML, OCaml:</strong> algebraic data types, pattern matching, type inference, semicolon statement separation</li>
+<li><strong>C++:</strong> references, RAII, smart pointers, move semantics, monomorphization, memory model</li>
+<li><strong>ML Kit, Cyclone:</strong> region based memory management</li>
+<li><strong>Haskell (GHC):</strong> typeclasses, type families</li>
+<li><strong>Newsqueak, Alef, Limbo:</strong> channels, concurrency</li>
+<li><strong>Erlang:</strong> message passing, thread failure</li>
+</ul>
+</section><section id="einflüße-2" class="slide level2">
+<h1>Einflüße 2</h1>
+<ul>
+<li><strong>Swift:</strong> optional bindings</li>
+<li><strong>Scheme:</strong> hygienic macros</li>
+<li><strong>C#:</strong> attributes</li>
+<li><strong>Unicode Annex #31:</strong> identifier and pattern syntax</li>
+</ul>
+<p>siehe: <a href="http://doc.rust-lang.org/reference.html#appendix-influences">influence</a></p>
+</section></section>
+<section><section id="features" class="titleslide slide level1"><h1>Features</h1></section><section id="sicherheit" class="slide level2">
+<h1>Sicherheit</h1>
+<ul>
+<li>guaranteed memory safety</li>
+<li><p>threads without data races</p></li>
+<li>move semantics</li>
+<li>Type inference</li>
+<li><p>Typsicherheit zur compile time -&gt; no implicit coercions/casting</p></li>
+</ul>
+</section><section id="leistung" class="slide level2">
+<h1>Leistung</h1>
+<ul>
+<li>zero-cost abstractions</li>
+<li>minimal runtime</li>
+<li>efficient C bindings</li>
+</ul>
+</section><section id="sprache" class="slide level2">
+<h1>Sprache</h1>
+<ul>
+<li>trait-based generics</li>
+<li>pattern matching</li>
+<li>hygienische macros</li>
+<li>expressions und statements</li>
+<li>closures</li>
+<li>Beispiele folgen</li>
+</ul>
+</section><section id="ökosystem" class="slide level2">
+<h1>Ökosystem</h1>
+<ul>
+<li>Dokumentation ist TopPriority</li>
+<li>in-line Tests und Benchmarks (<code>#[test]</code> und <code>#[bench]</code>)</li>
+<li>cargo kompiliert, dokumentiert, testet, benchmarkt und publisht</li>
+</ul>
+</section></section>
+<section><section id="details" class="titleslide slide level1"><h1>Details</h1></section><section id="memory-model" class="slide level2">
+<h1>Memory Model</h1>
+<ul>
+<li>kein GarbageCollector</li>
+<li>keine manuelle Speicherverwaltung</li>
+<li><strong>borrow checker</strong> forciert Ownership and Move Semantics</li>
+</ul>
+</section><section id="wie-jetzt" class="slide level2">
+<h1>Wie jetzt?</h1>
+<ul>
+<li>a reference to a resource is &quot;borrowed&quot;</li>
+<li>only one party can mutate resources</li>
+<li>Move Semantics are implicitly part of the language</li>
+<li>there is one concrete owner to everything</li>
+<li>racing code would not even compile</li>
+</ul>
+</section></section>
+<section><section id="here-be-dragons" class="titleslide slide level1"><h1>here be dragons</h1></section><section id="der-rest-ist-unsortiert" class="slide level2">
+<h1>der rest ist unsortiert</h1>
+<ul>
+<li>Traits vs Object Orientation -&gt; composition vs inheritance</li>
+<li>Trait based Generics vs Templates -&gt; no ducktyping in &quot;template&quot; expansions</li>
+<li>no nullpointers =&gt; functions return <code>Option&lt;T&gt;</code> or <code>Result&lt;T&gt;</code></li>
+<li>functional style Error Handling, no exceptions :)</li>
+</ul>
+</section><section id="concurrency" class="slide level2">
+<h1>Concurrency</h1>
+<ul>
+<li>mpsc channels</li>
+<li>ownership is enforced -&gt; no Dataraces</li>
+<li>shared access through <code>Arc</code></li>
+</ul>
+<pre class="sourceCode rust"><code class="sourceCode rust"><span class="kw">use</span> std::sync::{Arc, Mutex};
+<span class="kw">use</span> std::thread;
+
+<span class="kw">fn</span> main() {
+    <span class="kw">let</span> data = Arc::new(
+        Mutex::new(
+            <span class="ot">vec!</span>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+            )
+        );
+
+    <span class="kw">for</span> i in <span class="dv">0.</span>.<span class="dv">3</span> {
+        <span class="kw">let</span> data = data.clone();
+        thread::spawn(move || {
+            <span class="kw">let</span> <span class="kw">mut</span> data = data.lock().unwrap();
+            data[i] += <span class="dv">1</span>;
+        });
+    }
+
+    thread::sleep_ms(<span class="dv">50</span>);
+}</code></pre>
+</section><section id="macros" class="slide level2">
+<h1>Macros</h1>
+<ul>
+<li>very unlike C/C++ Macros</li>
+<li>work on AST after parser</li>
+<li><strong>example</strong></li>
+</ul>
+</section></section>
+<section><section id="handson-life-coding-examples" class="titleslide slide level1"><h1>HandsOn: Life Coding Examples</h1></section><section id="basics" class="slide level2">
+<h1>Basics</h1>
+<ol>
+<li>(im)mutability</li>
+<li>primitives and tuple, enum, struct</li>
+<li>control flow (if, loop, while)</li>
+<li>expressions vs statements</li>
+<li>println!()</li>
+</ol>
+</section><section id="get-rusty" class="slide level2">
+<h1>Get Rusty</h1>
+<ol>
+<li>references (e.g. String vs &amp;str)</li>
+<li>Option and Result</li>
+<li>pattern matching (match, if let)</li>
+<li>error handling, simple</li>
+</ol>
+</section><section id="stdlib" class="slide level2">
+<h1>Stdlib</h1>
+<ol>
+<li>collections</li>
+<li>iterators</li>
+</ol>
+</section><section id="advanced" class="slide level2">
+<h1>Advanced</h1>
+<ol>
+<li>closures</li>
+<li>traits, trait bounds</li>
+<li>documentation comments, in-line tests <code>#[test]</code> and benchmarks <code>#[bench]</code></li>
+<li>error handling, closer look</li>
+</ol>
+</section><section id="for-completeness-sake" class="slide level2">
+<h1>For Completeness Sake</h1>
+<ol>
+<li>modules</li>
+<li>macros ( please don't )</li>
+</ol>
+</section></section>
+<section><section id="extension-slides" class="titleslide slide level1"><h1>Extension Slides</h1></section><section id="section" class="slide level2">
+<h1></h1>
+</section></section>
+<section><section id="alternatives-to-rust" class="titleslide slide level1"><h1>alternatives to Rust?</h1></section><section id="go" class="slide level2">
+<h1>Go</h1>
+<ul>
+<li>(+) compiles faster than rust</li>
+<li>(+) statically compiled and linked</li>
+<li>(-) strange design decisions</li>
+<li>(-) nothing groundbreaking</li>
+<li>(-) garbage collected</li>
+<li>(-) completely separate toolchain</li>
+<li>-&gt; more competition to java</li>
+</ul>
+</section><section id="c17-gsl" class="slide level2">
+<h1>C++17 + GSL</h1>
+<ul>
+<li>(+) fits in existing codebase</li>
+<li>(-) reiteration of codebase necessary</li>
+<li>(-) large language, old style still possible</li>
+<li>(-) language makes static compile time checks nontrivial</li>
+</ul>
+</section><section id="haskell" class="slide level2">
+<h1>Haskell</h1>
+<ul>
+<li>(+) safe</li>
+<li>(-) not intended for systems programming</li>
+</ul>
+</section><section id="swift" class="slide level2">
+<h1>Swift</h1>
+<ul>
+<li>no garbage collection, by reference counting</li>
+<li><code>Optional</code> is similar to <code>Option&lt;T&gt;</code>, but equivalent to <code>Result&lt;T&gt;</code> is 3rd party</li>
+</ul>
+</section><section id="disadvantages-of-rust" class="slide level2">
+<h1>disadvantages of Rust</h1>
+<ul>
+<li>price of safety: may slightly reduce performance</li>
+<li>bigger bins</li>
+<li>ABI compatible with C but not with C++, requires wrappers or <code>extern c</code></li>
+<li>static linking by default</li>
+<li>builds against glibc, musl (experimental), uclibc (not tested)</li>
+</ul>
+<!--
+# Community and Documentation
+
+## Community and Documentation
+
+* users.rust-lang.org
+* http://rustbyexample.com/
+* http://doc.rust-lang.org/stable/book/
+* http://www.reddit.com/r/rust
+* http://rustyrad.io/
+* http://this-week-in-rust.org/
+* http://cglab.ca/~abeinges/blah/turpl/_book/
+
+# eco system
+* cargo as package manager and build system
+* crates.io as repo, extern git repositories, explizite
+
+-->
+
+
+</section></section>
+    </div>
+  </div>
+
+  <script src="reveal.js/lib/js/head.min.js"></script>
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="jquery-1.12.0.min.js"></script>
+  <script src="add_playpen.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+          { src: 'reveal.js/plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+    </body>
+</html>
