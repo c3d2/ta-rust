@@ -15,6 +15,7 @@
 * machine learning tools ( [leaf](https://github.com/autumnai/leaf), [rustlearn](https://github.com/maciejkula/rustlearn))
 * safe parsers ([nom](https://github.com/Geal/nom))
 * [seL4 stack](https://robigalia.org/)
+* Maidsafe
 * everything else
 
 # Vergleiche
@@ -31,6 +32,7 @@
 * statisch kompiliert ( LLVM )
 * scheiße schnell
 * zero cost abstractions
+* generic
 * kein garbage-collector
 * **low level**
 
@@ -39,6 +41,8 @@
 * streng getypt
 * Hindley-Milner type system
 * immutable variables
+* pattern matching
+* λ-ausdrücke/closures
 
 ## wie ruby oder python
 
@@ -108,6 +112,7 @@ siehe: [influence](http://doc.rust-lang.org/reference.html#appendix-influences)
 * kein GarbageCollector
 * keine manuelle Speicherverwaltung
 * **borrow checker** forciert Ownership and Move Semantics
+* Destruktor: `trait Drop`
 
 ## Wie jetzt?
 
