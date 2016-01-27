@@ -273,3 +273,26 @@ fn main() {
 * Binaries: `src/main.rs src/bin/*.rs`
 
 ## Cargo.toml
+
+
+
+
+ownership/borrowing: use-case cache
+
+struct Cache {
+    cached: Option<i32>;
+}
+
+impl Cache {
+    pub fn get(&mut self) -> &i32 {
+        match self.cached {
+            Some(ref cached) => cached;
+            None => {
+                self.cached = 32;
+                &self.cached
+            }
+        }
+    }
+}
+
+Typing-Beispiele: Fresh in Hyper, pulse-simple
