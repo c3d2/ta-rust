@@ -261,3 +261,15 @@ fn main() {
 * crates.io as repo, extern git repositories, explizite
 
 -->
+
+# Cargo
+
+* Gleich benutzen
+* Macht den Umgang mit external crates möglich
+
+## Wohin mit dem Code?
+
+* Libraries: `src/**/lib.rs`
+* Binaries: `src/main.rs src/bin/*.rs`
+
+## Cargo.toml
