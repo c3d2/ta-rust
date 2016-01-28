@@ -15,6 +15,7 @@
 * machine learning tools ([leaf](https://github.com/autumnai/leaf), [rustlearn](https://github.com/maciejkula/rustlearn))
 * safe parsers ([nom](https://github.com/Geal/nom))
 * [seL4 stack](https://robigalia.org/)
+* Maidsafe
 * everything else
 
 # Vergleiche
@@ -31,6 +32,7 @@
 * statisch kompiliert *LLVM*
 * scheiße schnell
 * zero cost abstractions
+* generic
 * kein garbage-collector
 * **low level**
 
@@ -38,14 +40,15 @@
 
 * streng getypt
 * Hindley-Milner type system
-* immutable by default
-* ziemlich funktional
+* immutable variables
+* pattern matching
+* λ-ausdrücke/closures
 
 ## wie ruby oder python
 
 * expressive Syntax
 * gut zu lesen
-* Buildsystem und Paketmanager (cargo & crates.io)
+* build system und Packetmanager (cargo & crates.io)
 
 ## wie rust!
 
@@ -219,6 +222,7 @@ fn main(){
 * kein GarbageCollector
 * keine manuelle Speicherverwaltung
 * **borrow checker** forciert Ownership and Move Semantics
+* Destruktor: `trait Drop`
 
 ## Move Semantics 1/2
 
@@ -459,3 +463,38 @@ fn main() {
 * crates.io as repo, extern git repositories, explizite
 
 -->
+
+# Cargo
+
+* Gleich benutzen
+* Macht den Umgang mit external crates möglich
+
+## Wohin mit dem Code?
+
+* Libraries: `src/**/lib.rs`
+* Binaries: `src/main.rs src/bin/*.rs`
+
+## Cargo.toml
+
+
+
+
+ownership/borrowing: use-case cache
+
+struct Cache {
+    cached: Option<i32>;
+}
+
+impl Cache {
+    pub fn get(&mut self) -> &i32 {
+        match self.cached {
+            Some(ref cached) => cached;
+            None => {
+                self.cached = 32;
+                &self.cached
+            }
+        }
+    }
+}
+
+Typing-Beispiele: Fresh in Hyper, pulse-simple
