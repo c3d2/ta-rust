@@ -137,9 +137,11 @@ siehe: [influences](http://doc.rust-lang.org/reference.html#appendix-influences)
 fn main(){
   println!("hello world");
 }
-
-* macro
 ```
+
+. . .
+
+Vorsicht, Macro!
 
 ## Formatted Print
 
@@ -202,6 +204,15 @@ let _range: Vec<i32> = (0..10).collect();
 ```
 
 ## Options
+```rust-norun
+pub enum Option<T> {
+    Some(T),
+    None
+}
+```
+
+. . . 
+
 ```rust
 fn divide(a:i32, b:i32) -> Option<i32>{
   if b == 0 {
@@ -217,7 +228,7 @@ fn main(){
 
 ## Primitive
 
-```rust
+```rust-norun
 fn main(){
   let one = 1u32;
   let fourtytwo= 0b101010;
@@ -228,7 +239,7 @@ fn main(){
 
 ## Pointers
 
-```rust
+```rust-norun
 fn main(){
   let sushi = Box::new(("rice", "fish"));
 }
@@ -243,17 +254,17 @@ fn main(){
 * **borrow checker** forciert Ownership and Move Semantics
 * Destruktor: `trait Drop`
 
-## Move Semantics 1/2
+## Move Semantics 1
 
 ```rust
 fn main(){
   let list = vec![1,2,3];
   let x = list;
-  let y = list;
+  let y = list; // Compiletime Error: use after move
 }
 ```
 
-## Move Semantics 2/2
+## Move Semantics 2
 
 ```rust
 fn do_some(_foo:Vec<i32>){
@@ -268,14 +279,32 @@ fn main(){
 }
 ```
 
-## Sharing is Caring
+## Sharing is Caring 1
 
 
 ```rust
 fn main(){
   let list = vec![1,2,3];
   let x = &list;
-  let y = list;
+  let y = list; // Compiletime Error: use while borrowed
+}
+```
+
+. . .
+
+Warum also?
+Borrowing gilt nur innerhalb von Scopes!
+
+
+## Sharing is Caring 2
+
+```rust
+fn main(){
+  let list = vec![1,2,3];
+  {
+    let _x = &list;
+  }
+  let _y = list;
 }
 ```
 
@@ -289,21 +318,33 @@ fn main(){
   let list = vec![1,2,3];
   println!("{}", list[0]);
 
-  do_some(&list);          // explitzit
+  do_some(&list);          // explitzite Referenz, unlike C++
   println!("{}", list[0]); // fails no more
 }
 ```
 
 ## References at a glance
 
-* `T` Basistyp
-* `mut T` veränderlicher Typ
-* `&T` read-only Referenz
-  * niemand kann schreiben
-* `&mut T` schreibbare Referenze
-  * nur einer kann schreiben
+Syntax    Funktion
+------    --------
+`T`       Basistyp
+`mut T`   veränderlicher Typ
+`&T`      read-only Referenz *niemand kann schreiben*
+`&mut T`  schreibbare Referenze *nur einer kann schreiben*
 
-## Beispiele
+```rust-norun
+let v:Vec<i32> = vec![1,2,3,4];
+let v_ref:&Vec<i32> = &v;
+```
+
+```rust-norun
+let mut v:Vec<i32> = vec![1,2,3,4];
+let v_ref:&mut Vec<i32> = &mut v;
+```
+
+## Usecases
+
+. . .
 
 ```rust-norun
 fn read(v: &Vec<String>) -> String {
@@ -313,6 +354,8 @@ fn read(v: &Vec<String>) -> String {
 }
 ```
 
+. . .
+
 ```rust-norun
 fn modify(v: &mut Vec<String>, name: &str) {
     let freshly_created = format!("Hello {}", name);
@@ -320,12 +363,16 @@ fn modify(v: &mut Vec<String>, name: &str) {
 }
 ```
 
+. . .
+
 ```rust-norun
 fn consume(v: Vec<String>) -> String {
     for s in v { return s; }
     panic!("v was empty?!?");
 }
 ```
+
+. . .
 
 ```rust-norun
 fn read(v: &Vec<String>) -> String { ... }

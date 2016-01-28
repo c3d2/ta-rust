@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="astro und hoodie">
-  <meta name="dcterms.date" content="2016-01-11">
-  <title>Rust Themenabend</title>
+  <meta name="dcterms.date" content="2016-02-10">
+  <title>Rust</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -33,44 +33,47 @@
     <div class="slides">
 
 <section>
-  <h1 class="title">Rust Themenabend</h1>
+  <h1 class="title">Rust</h1>
   <h2 class="author">astro und hoodie</h2>
-  <h3 class="date">January 11, 2016</h3>
+  <h3 class="date">February 10, 2016</h3>
 </section>
 
-<section><section id="was-ist-rust" class="titleslide slide level1"><h1>Was ist Rust?</h1></section><section id="existiert-seit" class="slide level2">
-<h1>existiert seit</h1>
+<section><section id="was-ist-rust" class="titleslide slide level1"><h1>Was ist Rust?</h1></section><section id="eine-programmiersprache" class="slide level2">
+<h1>eine Programmiersprache!</h1>
 <ul>
-<li>developed <span class="citation" data-cites="mozilla">@mozilla</span> since ~2007</li>
-<li>stable since May 2015</li>
+<li>entwickelt von Mozilla, seit 2007</li>
+<li>stabil seit Mai 2015</li>
 </ul>
-</section><section id="rust-powers" class="slide level2">
-<h1>Rust powers:</h1>
+</section><section id="beispiele" class="slide level2">
+<h1>Beispiele:</h1>
 <ul>
 <li>Servo <em>(super cool fast browser engine)</em></li>
 <li>machine learning tools (<a href="https://github.com/autumnai/leaf">leaf</a>, <a href="https://github.com/maciejkula/rustlearn">rustlearn</a>)</li>
+<li>rustc selbst</li>
 <li>safe parsers (<a href="https://github.com/Geal/nom">nom</a>)</li>
 <li><a href="https://robigalia.org/">seL4 stack</a></li>
 <li>Maidsafe</li>
-<li>everything else</li>
 </ul>
 </section></section>
 <section><section id="vergleiche" class="titleslide slide level1"><h1>Vergleiche</h1></section><section id="rust-ist-wie-..." class="slide level2">
 <h1>Rust ist wie ...</h1>
 <ul>
-<li>... c++</li>
+<li>... c/c++</li>
 <li>... haskell</li>
 <li>... ruby</li>
 <li>... python</li>
 </ul>
-</section><section id="wie-c" class="slide level2">
-<h1>wie c++</h1>
+<div class="fragment">
+<p>und doch ganz anders</p>
+</div>
+</section><section id="wie-cc" class="slide level2">
+<h1>wie c/c++</h1>
 <ul>
 <li>statisch kompiliert <em>LLVM</em></li>
-<li>scheiße schnell</li>
-<li>zero cost abstractions</li>
-<li>generic</li>
+<li>schnell</li>
 <li>kein garbage-collector</li>
+<li>Generics</li>
+<li>zero cost abstractions</li>
 <li><strong>low level</strong></li>
 </ul>
 </section><section id="wie-haskell" class="slide level2">
@@ -78,21 +81,23 @@
 <ul>
 <li>streng getypt</li>
 <li>Hindley-Milner type system</li>
-<li>immutable variables</li>
-<li>pattern matching</li>
-<li>λ-ausdrücke/closures</li>
+<li>Immutable Variablen</li>
+<li>Pattern Matching</li>
+<li>lambda-Ausdrücke/Closures</li>
 </ul>
 </section><section id="wie-ruby-oder-python" class="slide level2">
 <h1>wie ruby oder python</h1>
 <ul>
 <li>expressive Syntax</li>
 <li>gut zu lesen</li>
-<li>build system und Packetmanager (cargo &amp; crates.io)</li>
+<li>Build system und Packetmanager (cargo &amp; crates.io)</li>
 </ul>
-</section><section id="wie-rust" class="slide level2">
-<h1>wie rust!</h1>
+</section><section id="wie-rust-eben" class="slide level2">
+<h1>wie rust eben!</h1>
 <ul>
 <li><strong>borrow checker</strong></li>
+<li>lifetimes Syntax</li>
+<li>sehr explizit</li>
 </ul>
 </section><section id="einflüße" class="slide level2">
 <h1>Einflüße</h1>
@@ -112,23 +117,24 @@
 <li><strong>C#:</strong> attributes</li>
 <li><strong>Unicode Annex #31:</strong> identifier and pattern syntax</li>
 </ul>
-<p>siehe: <a href="http://doc.rust-lang.org/reference.html#appendix-influences">influence</a></p>
+<p>siehe: <a href="http://doc.rust-lang.org/reference.html#appendix-influences">influences</a></p>
 </section></section>
 <section><section id="features" class="titleslide slide level1"><h1>Features</h1></section><section id="sicherheit" class="slide level2">
 <h1>Sicherheit</h1>
 <ul>
-<li>guaranteed memory safety</li>
-<li><p>threads without data races</p></li>
-<li>move semantics</li>
+<li>Speichersicherheit</li>
+<li><p>Cuncurrency ohne Speicherverletzungen</p></li>
+<li><em>move semantics</em></li>
 <li>Type inference</li>
-<li><p>Typsicherheit zur compile time -&gt; no implicit coercions/casting</p></li>
+<li>Typsicherheit zur Compilezeit</li>
+<li><p>keine implizites casting</p></li>
 </ul>
 </section><section id="leistung" class="slide level2">
 <h1>Leistung</h1>
 <ul>
-<li>zero-cost abstractions</li>
-<li>minimal runtime</li>
-<li>efficient C bindings</li>
+<li><a href="http://blog.rust-lang.org/2015/05/11/traits.html">zero-cost abstractions</a></li>
+<li>minimale Runtime</li>
+<li>effiziente C Bindings</li>
 </ul>
 </section><section id="sprache" class="slide level2">
 <h1>Sprache</h1>
@@ -151,14 +157,29 @@
 </ul></li>
 <li>cargo kompiliert, dokumentiert, testet, benchmarkt und publisht</li>
 </ul>
+</section><section id="cargo" class="slide level2">
+<h1>Cargo</h1>
+<ul>
+<li>cargo as package manager and build system</li>
+<li>crates.io as repo, extern git repositories, explizite</li>
+<li>Gleich benutzen</li>
+<li>Macht den Umgang mit external crates möglich</li>
+</ul>
+</section><section id="wohin-mit-dem-code" class="slide level2">
+<h1>Wohin mit dem Code?</h1>
+<ul>
+<li>Libraries: <code>src/**/lib.rs</code></li>
+<li>Binaries: <code>src/main.rs src/bin/*.rs</code></li>
+</ul>
 </section></section>
-<section><section id="beispiele" class="titleslide slide level1"><h1>Beispiele</h1></section><section id="hello-world" class="slide level2">
+<section><section id="beispiele-1" class="titleslide slide level1"><h1>Beispiele</h1></section><section id="hello-world" class="slide level2">
 <h1>Hello world</h1>
 <pre class="rust"><code>fn main(){
   println!(&quot;hello world&quot;);
-}
-
-* macro</code></pre>
+}</code></pre>
+<div class="fragment">
+<p>Vorsicht, Macro!</p>
+</div>
 </section><section id="formatted-print" class="slide level2">
 <h1>Formatted Print</h1>
 <pre class="rust"><code>fn main() {
@@ -211,6 +232,11 @@ let _range: Vec&lt;i32&gt; = (0..10).collect();
 }</code></pre>
 </section><section id="options" class="slide level2">
 <h1>Options</h1>
+<pre class="rust-norun"><code>pub enum Option&lt;T&gt; {
+    Some(T),
+    None
+}</code></pre>
+<div class="fragment">
 <pre class="rust"><code>fn divide(a:i32, b:i32) -&gt; Option&lt;i32&gt;{
   if b == 0 {
     None
@@ -221,9 +247,10 @@ fn main(){
   println!(&quot;12/3 = {:?}&quot;, divide(12,3));
   println!(&quot;12/0 = {:?}&quot;, divide(12,0));
 }</code></pre>
+</div>
 </section><section id="primitive" class="slide level2">
 <h1>Primitive</h1>
-<pre class="rust"><code>fn main(){
+<pre class="rust-norun"><code>fn main(){
   let one = 1u32;
   let fourtytwo= 0b101010;
   let goku = 9_001;
@@ -231,7 +258,7 @@ fn main(){
 }</code></pre>
 </section><section id="pointers" class="slide level2">
 <h1>Pointers</h1>
-<pre class="rust"><code>fn main(){
+<pre class="rust-norun"><code>fn main(){
   let sushi = Box::new((&quot;rice&quot;, &quot;fish&quot;));
 }</code></pre>
 </section></section>
@@ -243,15 +270,15 @@ fn main(){
 <li><strong>borrow checker</strong> forciert Ownership and Move Semantics</li>
 <li>Destruktor: <code>trait Drop</code></li>
 </ul>
-</section><section id="move-semantics-12" class="slide level2">
-<h1>Move Semantics 1/2</h1>
+</section><section id="move-semantics-1" class="slide level2">
+<h1>Move Semantics 1</h1>
 <pre class="rust"><code>fn main(){
   let list = vec![1,2,3];
   let x = list;
-  let y = list;
+  let y = list; // Compiletime Error: use after move
 }</code></pre>
-</section><section id="move-semantics-22" class="slide level2">
-<h1>Move Semantics 2/2</h1>
+</section><section id="move-semantics-2" class="slide level2">
+<h1>Move Semantics 2</h1>
 <pre class="rust"><code>fn do_some(_foo:Vec&lt;i32&gt;){
     // konsumiert `foo`
 }
@@ -262,12 +289,24 @@ fn main(){
   do_some(list);
   println!(&quot;{}&quot;, list[0]); // fails
 }</code></pre>
-</section><section id="sharing-is-caring" class="slide level2">
-<h1>Sharing is Caring</h1>
+</section><section id="sharing-is-caring-1" class="slide level2">
+<h1>Sharing is Caring 1</h1>
 <pre class="rust"><code>fn main(){
   let list = vec![1,2,3];
   let x = &amp;list;
-  let y = list;
+  let y = list; // Compiletime Error: use while borrowed
+}</code></pre>
+<div class="fragment">
+<p>Warum also? Borrowing gilt nur innerhalb von Scopes!</p>
+</div>
+</section><section id="sharing-is-caring-2" class="slide level2">
+<h1>Sharing is Caring 2</h1>
+<pre class="rust"><code>fn main(){
+  let list = vec![1,2,3];
+  {
+    let _x = &amp;list;
+  }
+  let _y = list;
 }</code></pre>
 </section><section id="borrowing" class="slide level2">
 <h1>Borrowing</h1>
@@ -278,37 +317,67 @@ fn main(){
   let list = vec![1,2,3];
   println!(&quot;{}&quot;, list[0]);
 
-  do_some(&amp;list);          // explitzit
+  do_some(&amp;list);          // explitzite Referenz, unlike C++
   println!(&quot;{}&quot;, list[0]); // fails no more
 }</code></pre>
 </section><section id="references-at-a-glance" class="slide level2">
 <h1>References at a glance</h1>
-<ul>
-<li><code>T</code> Basistyp</li>
-<li><code>mut T</code> veränderlicher Typ</li>
-<li><code>&amp;T</code> read-only Referenz</li>
-<li>niemand kann schreiben</li>
-<li><code>&amp;mut T</code> schreibbare Referenze</li>
-<li>nur einer kann schreiben</li>
-</ul>
-</section><section id="beispiele-1" class="slide level2">
-<h1>Beispiele</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Syntax</th>
+<th style="text-align: left;">Funktion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>T</code></td>
+<td style="text-align: left;">Basistyp</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>mut T</code></td>
+<td style="text-align: left;">veränderlicher Typ</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>&amp;T</code></td>
+<td style="text-align: left;">read-only Referenz <em>niemand kann schreiben</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&amp;mut T</code></td>
+<td style="text-align: left;">schreibbare Referenze <em>nur einer kann schreiben</em></td>
+</tr>
+</tbody>
+</table>
+<pre class="rust-norun"><code>let v:Vec&lt;i32&gt; = vec![1,2,3,4];
+let v_ref:&amp;Vec&lt;i32&gt; = &amp;v;</code></pre>
+<pre class="rust-norun"><code>let mut v:Vec&lt;i32&gt; = vec![1,2,3,4];
+let v_ref:&amp;mut Vec&lt;i32&gt; = &amp;mut v;</code></pre>
+</section><section id="usecases" class="slide level2">
+<h1>Usecases</h1>
+<div class="fragment">
 <pre class="rust-norun"><code>fn read(v: &amp;Vec&lt;String&gt;) -&gt; String {
     let first: &amp;String = &amp;v[0]; // borrow ref to first elem
     println!(&quot;v[0]: {}&quot;, first);
     return first.clone();
 }</code></pre>
+</div>
+<div class="fragment">
 <pre class="rust-norun"><code>fn modify(v: &amp;mut Vec&lt;String&gt;, name: &amp;str) {
     let freshly_created = format!(&quot;Hello {}&quot;, name);
     v.push(freshly_created);
 }</code></pre>
+</div>
+<div class="fragment">
 <pre class="rust-norun"><code>fn consume(v: Vec&lt;String&gt;) -&gt; String {
     for s in v { return s; }
     panic!(&quot;v was empty?!?&quot;);
 }</code></pre>
+</div>
+<div class="fragment">
 <pre class="rust-norun"><code>fn read(v: &amp;Vec&lt;String&gt;) -&gt; String { ... }
 fn modify(v: &amp;mut Vec&lt;String&gt;, name: &amp;str) { ... }
 fn consume(v: Vec&lt;String&gt;) -&gt; String { ... }</code></pre>
+</div>
 </section></section>
 <section><section id="oop" class="titleslide slide level1"><h1>OOP ?</h1></section><section id="structs-und-enums" class="slide level2">
 <h1>Structs und Enums</h1>
@@ -413,20 +482,6 @@ fn main() {
 <li>http://rustyrad.io/</li>
 <li>http://this-week-in-rust.org/</li>
 <li>http://cglab.ca/~abeinges/blah/turpl/_book/</li>
-</ul>
-</section><section id="cargo" class="slide level2">
-<h1>Cargo</h1>
-<ul>
-<li>cargo as package manager and build system</li>
-<li>crates.io as repo, extern git repositories, explizite</li>
-<li>Gleich benutzen</li>
-<li>Macht den Umgang mit external crates möglich</li>
-</ul>
-</section><section id="wohin-mit-dem-code" class="slide level2">
-<h1>Wohin mit dem Code?</h1>
-<ul>
-<li>Libraries: <code>src/**/lib.rs</code></li>
-<li>Binaries: <code>src/main.rs src/bin/*.rs</code></li>
 </ul>
 </section><section id="cargo.toml" class="slide level2">
 <h1>Cargo.toml</h1>
