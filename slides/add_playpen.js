@@ -1,6 +1,8 @@
-var elements = document.querySelectorAll('code.sourceCode');
-
+var elements= document.querySelectorAll('pre.rust code');
 Array.prototype.forEach.call(elements, function(el) {
+
+  // highlight
+  hljs.highlightBlock(el);
 
   var a = document.createElement('a');
   a.setAttribute('class', 'test-arrow');
@@ -29,6 +31,13 @@ Array.prototype.forEach.call(elements, function(el) {
   el.appendChild(a);
 
 });
+
+$(document).ready(function() {
+  $( 'pre.rust-norun code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+});
+
 
 var SUCCESS = 0;
 var ERROR = 1;

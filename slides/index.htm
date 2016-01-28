@@ -11,33 +11,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
   <link rel="stylesheet" href="reveal.js/css/reveal.css">
-  <style type="text/css">
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
-  </style>
-  <link rel="stylesheet" href="reveal.js/css/theme/sky.css" id="theme">
-  <style type="text/css">
-code{white-space: pre;}
-code .playpen_result{
-  font-size:0.6em;
-  color:#f00 !important;
-}
-  </style>
+  <link rel="stylesheet" href="reveal.js/css/theme/beige.css" id="theme">
+  <style type="text/css"></style>
   <!-- Printing and PDF exports -->
   <script>
     var link = document.createElement( 'link' );
@@ -49,6 +24,9 @@ code .playpen_result{
   <!--[if lt IE 9]>
   <script src="reveal.js/lib/js/html5shiv.js"></script>
   <![endif]-->
+  <script src="./highlight.pack.js"></script>
+  <link rel="stylesheet" href="slide-style.css"/>
+  <link rel="stylesheet" href="styles/tomorrow.css"/>
 </head>
 <body>
   <div class="reveal">
@@ -70,7 +48,7 @@ code .playpen_result{
 <h1>Rust powers:</h1>
 <ul>
 <li>Servo <em>(super cool fast browser engine)</em></li>
-<li>machine learning tools ( <a href="https://github.com/autumnai/leaf">leaf</a>, <a href="https://github.com/maciejkula/rustlearn">rustlearn</a>)</li>
+<li>machine learning tools (<a href="https://github.com/autumnai/leaf">leaf</a>, <a href="https://github.com/maciejkula/rustlearn">rustlearn</a>)</li>
 <li>safe parsers (<a href="https://github.com/Geal/nom">nom</a>)</li>
 <li><a href="https://robigalia.org/">seL4 stack</a></li>
 <li>everything else</li>
@@ -87,7 +65,7 @@ code .playpen_result{
 </section><section id="wie-c" class="slide level2">
 <h1>wie c++</h1>
 <ul>
-<li>statisch kompiliert ( LLVM )</li>
+<li>statisch kompiliert <em>LLVM</em></li>
 <li>scheiße schnell</li>
 <li>zero cost abstractions</li>
 <li>kein garbage-collector</li>
@@ -98,14 +76,15 @@ code .playpen_result{
 <ul>
 <li>streng getypt</li>
 <li>Hindley-Milner type system</li>
-<li>immutable variables</li>
+<li>immutable by default</li>
+<li>ziemlich funktional</li>
 </ul>
 </section><section id="wie-ruby-oder-python" class="slide level2">
 <h1>wie ruby oder python</h1>
 <ul>
 <li>expressive Syntax</li>
 <li>gut zu lesen</li>
-<li>build system und Packetmanager (cargo &amp; crates.io)</li>
+<li>Buildsystem und Paketmanager (cargo &amp; crates.io)</li>
 </ul>
 </section><section id="wie-rust" class="slide level2">
 <h1>wie rust!</h1>
@@ -120,11 +99,11 @@ code .playpen_result{
 <li><strong>ML Kit, Cyclone:</strong> region based memory management</li>
 <li><strong>Haskell (GHC):</strong> typeclasses, type families</li>
 <li><strong>Newsqueak, Alef, Limbo:</strong> channels, concurrency</li>
-<li><strong>Erlang:</strong> message passing, thread failure</li>
 </ul>
-</section><section id="einflüße-2" class="slide level2">
-<h1>Einflüße 2</h1>
+</section><section id="einflüße-1" class="slide level2">
+<h1>Einflüße</h1>
 <ul>
+<li><strong>Erlang:</strong> message passing, thread failure</li>
 <li><strong>Swift:</strong> optional bindings</li>
 <li><strong>Scheme:</strong> hygienic macros</li>
 <li><strong>C#:</strong> attributes</li>
@@ -162,26 +141,179 @@ code .playpen_result{
 <h1>Ökosystem</h1>
 <ul>
 <li>Dokumentation ist TopPriority</li>
-<li>in-line Tests und Benchmarks (<code>#[test]</code> und <code>#[bench]</code>)</li>
+<li>in-line Tests und Benchmarks
+<ul>
+<li><code>#[test]</code></li>
+<li><code>#[bench]</code></li>
+</ul></li>
 <li>cargo kompiliert, dokumentiert, testet, benchmarkt und publisht</li>
 </ul>
 </section></section>
-<section><section id="details" class="titleslide slide level1"><h1>Details</h1></section><section id="memory-model" class="slide level2">
+<section><section id="beispiele" class="titleslide slide level1"><h1>Beispiele</h1></section><section id="hello-world" class="slide level2">
+<h1>Hello world</h1>
+<pre class="rust"><code>fn main(){
+  println!(&quot;hello world&quot;);
+}
+
+* macro</code></pre>
+</section><section id="formatted-print" class="slide level2">
+<h1>Formatted Print</h1>
+<pre class="rust"><code>fn main() {
+
+    println!(&quot;{0} entspricht {0:b} &quot;, 42);
+
+    println!(&quot;{0}, this is {1}. {1}, this is {0}&quot;, &quot;Alice&quot;, &quot;Bob&quot;);
+
+    // As can named arguments.
+    println!(&quot;Themenabend   \&quot;{subject}\&quot;&quot;, subject=&quot;Rust&quot;,);
+
+    // Alignment
+    println!(&quot;{number:&gt;width$}&quot;, number=1, width=6);
+    println!(&quot;{number:&gt;0width$}&quot;, number=1, width=6);
+
+}</code></pre>
+</section><section id="debug-print" class="slide level2">
+<h1>Debug Print</h1>
+<pre class="rust"><code>fn main(){
+
+    #[derive(Debug)]
+    struct Themenabend{
+      number: i32,
+      title: &amp;&#39;static str,
+    };
+
+    println!(&quot;Interne Struktur von {:?}&quot;,
+    Themenabend{
+      number:3,
+      title:&quot;Rust Themenabend&quot;
+    });
+}</code></pre>
+</section></section>
+<section><section id="datentypen" class="titleslide slide level1"><h1>Datentypen</h1></section><section id="vectors" class="slide level2">
+<h1>Vectors</h1>
+<pre class="rust"><code>fn main() {
+let _list = vec![1,2,3,4];
+
+// entspricht
+
+let _list2 = {
+  let mut list = Vec::new();
+  list.push(1);
+  list.push(2);
+  //...
+  list
+};
+
+let _range: Vec&lt;i32&gt; = (0..10).collect();
+}</code></pre>
+</section><section id="options" class="slide level2">
+<h1>Options</h1>
+<pre class="rust"><code>fn divide(a:i32, b:i32) -&gt; Option&lt;i32&gt;{
+  if b == 0 {
+    None
+  } else { Some(a/b) }
+}
+
+fn main(){
+  println!(&quot;12/3 = {:?}&quot;, divide(12,3));
+  println!(&quot;12/0 = {:?}&quot;, divide(12,0));
+}</code></pre>
+</section><section id="primitive" class="slide level2">
+<h1>Primitive</h1>
+<pre class="rust"><code>fn main(){
+  let one = 1u32;
+  let fourtytwo= 0b101010;
+  let goku = 9_001;
+  let ladies = (&quot;x&quot;,&quot;y&quot;);
+}</code></pre>
+</section><section id="pointers" class="slide level2">
+<h1>Pointers</h1>
+<pre class="rust"><code>fn main(){
+  let sushi = Box::new((&quot;rice&quot;, &quot;fish&quot;));
+}</code></pre>
+</section></section>
+<section><section id="sicher-schnell-wie" class="titleslide slide level1"><h1>Sicher, schnell, wie?</h1></section><section id="memory-model" class="slide level2">
 <h1>Memory Model</h1>
 <ul>
 <li>kein GarbageCollector</li>
 <li>keine manuelle Speicherverwaltung</li>
 <li><strong>borrow checker</strong> forciert Ownership and Move Semantics</li>
 </ul>
-</section><section id="wie-jetzt" class="slide level2">
-<h1>Wie jetzt?</h1>
+</section><section id="move-semantics-12" class="slide level2">
+<h1>Move Semantics 1/2</h1>
+<pre class="rust"><code>fn main(){
+  let list = vec![1,2,3];
+  let x = list;
+  let y = list;
+}</code></pre>
+</section><section id="move-semantics-22" class="slide level2">
+<h1>Move Semantics 2/2</h1>
+<pre class="rust"><code>fn do_some(_foo:Vec&lt;i32&gt;){
+    // konsumiert `foo`
+}
+
+fn main(){
+  let list = vec![1,2,3];
+  println!(&quot;{}&quot;, list[0]);
+  do_some(list);
+  println!(&quot;{}&quot;, list[0]); // fails
+}</code></pre>
+</section><section id="sharing-is-caring" class="slide level2">
+<h1>Sharing is Caring</h1>
+<pre class="rust"><code>fn main(){
+  let list = vec![1,2,3];
+  let x = &amp;list;
+  let y = list;
+}</code></pre>
+</section><section id="borrowing" class="slide level2">
+<h1>Borrowing</h1>
+<pre class="rust"><code>fn do_some(_foo:&amp;Vec&lt;i32&gt;){
+}
+
+fn main(){
+  let list = vec![1,2,3];
+  println!(&quot;{}&quot;, list[0]);
+
+  do_some(&amp;list);          // explitzit
+  println!(&quot;{}&quot;, list[0]); // fails no more
+}</code></pre>
+</section><section id="references-at-a-glance" class="slide level2">
+<h1>References at a glance</h1>
 <ul>
-<li>a reference to a resource is &quot;borrowed&quot;</li>
-<li>only one party can mutate resources</li>
-<li>Move Semantics are implicitly part of the language</li>
-<li>there is one concrete owner to everything</li>
-<li>racing code would not even compile</li>
+<li><code>T</code> Basistyp</li>
+<li><code>mut T</code> veränderlicher Typ</li>
+<li><code>&amp;T</code> read-only Referenz</li>
+<li>niemand kann schreiben</li>
+<li><code>&amp;mut T</code> schreibbare Referenze</li>
+<li>nur einer kann schreiben</li>
 </ul>
+</section><section id="beispiele-1" class="slide level2">
+<h1>Beispiele</h1>
+<pre class="rust-norun"><code>fn read(v: &amp;Vec&lt;String&gt;) -&gt; String {
+    let first: &amp;String = &amp;v[0]; // borrow ref to first elem
+    println!(&quot;v[0]: {}&quot;, first);
+    return first.clone();
+}</code></pre>
+<pre class="rust-norun"><code>fn modify(v: &amp;mut Vec&lt;String&gt;, name: &amp;str) {
+    let freshly_created = format!(&quot;Hello {}&quot;, name);
+    v.push(freshly_created);
+}</code></pre>
+<pre class="rust-norun"><code>fn consume(v: Vec&lt;String&gt;) -&gt; String {
+    for s in v { return s; }
+    panic!(&quot;v was empty?!?&quot;);
+}</code></pre>
+<pre class="rust-norun"><code>fn read(v: &amp;Vec&lt;String&gt;) -&gt; String { ... }
+fn modify(v: &amp;mut Vec&lt;String&gt;, name: &amp;str) { ... }
+fn consume(v: Vec&lt;String&gt;) -&gt; String { ... }</code></pre>
+</section></section>
+<section><section id="oop" class="titleslide slide level1"><h1>OOP ?</h1></section><section id="structs-und-enums" class="slide level2">
+<h1>Structs und Enums</h1>
+</section><section id="impl" class="slide level2">
+<h1>Impl</h1>
+</section><section id="traits" class="slide level2">
+<h1>Traits</h1>
+</section><section class="slide level2">
+
 </section></section>
 <section><section id="here-be-dragons" class="titleslide slide level1"><h1>here be dragons</h1></section><section id="der-rest-ist-unsortiert" class="slide level2">
 <h1>der rest ist unsortiert</h1>
@@ -198,25 +330,25 @@ code .playpen_result{
 <li>ownership is enforced -&gt; no Dataraces</li>
 <li>shared access through <code>Arc</code></li>
 </ul>
-<pre class="sourceCode rust"><code class="sourceCode rust"><span class="kw">use</span> std::sync::{Arc, Mutex};
-<span class="kw">use</span> std::thread;
+<pre class="rust"><code>use std::sync::{Arc, Mutex};
+use std::thread;
 
-<span class="kw">fn</span> main() {
-    <span class="kw">let</span> data = Arc::new(
+fn main() {
+    let data = Arc::new(
         Mutex::new(
-            <span class="ot">vec!</span>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+            vec![1, 2, 3]
             )
         );
 
-    <span class="kw">for</span> i in <span class="dv">0.</span>.<span class="dv">3</span> {
-        <span class="kw">let</span> data = data.clone();
+    for i in 0..3 {
+        let data = data.clone();
         thread::spawn(move || {
-            <span class="kw">let</span> <span class="kw">mut</span> data = data.lock().unwrap();
-            data[i] += <span class="dv">1</span>;
+            let mut data = data.lock().unwrap();
+            data[i] += 1;
         });
     }
 
-    thread::sleep_ms(<span class="dv">50</span>);
+    thread::sleep_ms(50);
 }</code></pre>
 </section><section id="macros" class="slide level2">
 <h1>Macros</h1>

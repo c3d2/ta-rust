@@ -34,13 +34,7 @@ $endif$
 $for(css)$
   <link rel="stylesheet" href="$css$"/>
 $endfor$
-  <style type="text/css">
-code{white-space: pre;}
-code .playpen_result{
-  font-size:0.6em;
-  color:#f00 !important;
-}
-  </style>
+  <style type="text/css"></style>
   <!-- Printing and PDF exports -->
   <script>
     var link = document.createElement( 'link' );
@@ -58,6 +52,9 @@ $endif$
 $for(header-includes)$
   $header-includes$
 $endfor$
+  <script src="./highlight.pack.js"></script>
+  <link rel="stylesheet" href="slide-style.css"/>
+  <link rel="stylesheet" href="styles/tomorrow.css"/>
 </head>
 <body>
 $for(include-before)$
