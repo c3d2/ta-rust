@@ -1,60 +1,66 @@
-% Rust Themenabend
+% Rust
 % astro und hoodie
-% January 11, 2016
+% February 10, 2016
 
 # Was ist Rust?
 
-## existiert seit
+## eine Programmiersprache!
 
-* developed @mozilla since ~2007
-* stable since May 2015
+* entwickelt von Mozilla, seit 2007
+* stabil seit Mai 2015
 
-## Rust powers:
+## Beispiele:
 
 * Servo *(super cool fast browser engine)*
 * machine learning tools ([leaf](https://github.com/autumnai/leaf), [rustlearn](https://github.com/maciejkula/rustlearn))
+* rustc selbst
 * safe parsers ([nom](https://github.com/Geal/nom))
 * [seL4 stack](https://robigalia.org/)
 * Maidsafe
-* everything else
 
 # Vergleiche
 
 ## Rust ist wie ...
 
-* ... c++
+* ... c/c++
 * ... haskell
 * ... ruby
 * ... python
 
-## wie c++
+. . .
+
+und doch ganz anders
+
+## wie c/c++
 
 * statisch kompiliert *LLVM*
-* scheiße schnell
-* zero cost abstractions
-* generic
+* schnell
 * kein garbage-collector
+* Generics
+* zero cost abstractions
 * **low level**
 
 ## wie haskell
 
 * streng getypt
 * Hindley-Milner type system
-* immutable variables
-* pattern matching
-* λ-ausdrücke/closures
+* Immutable Variablen
+* Pattern Matching
+* lambda-Ausdrücke/Closures
 
 ## wie ruby oder python
 
 * expressive Syntax
 * gut zu lesen
-* build system und Packetmanager (cargo & crates.io)
+* Build system und Packetmanager (cargo & crates.io)
 
-## wie rust!
+## wie rust eben!
 
 * **borrow checker**
+* lifetimes Syntax
+* sehr explizit
 
----
+
 
 ## Einflüße
 
@@ -72,24 +78,25 @@
 * **C#:** attributes
 * **Unicode Annex #31:** identifier and pattern syntax
 
-siehe: [influence](http://doc.rust-lang.org/reference.html#appendix-influences)
+siehe: [influences](http://doc.rust-lang.org/reference.html#appendix-influences)
 
 # Features
 
 ## Sicherheit
 
-* guaranteed memory safety
-* threads without data races
+* Speichersicherheit
+* Cuncurrency ohne Speicherverletzungen
 
-* move semantics
+* *move semantics*
 * Type inference
-* Typsicherheit zur compile time -> no implicit coercions/casting
+* Typsicherheit zur Compilezeit
+  * keine implizites casting
 
 ## Leistung
 
-* zero-cost abstractions
-* minimal runtime
-* efficient C bindings
+* [zero-cost abstractions](http://blog.rust-lang.org/2015/05/11/traits.html)
+* minimale Runtime
+* effiziente C Bindings
 
 ## Sprache
 
@@ -108,6 +115,18 @@ siehe: [influence](http://doc.rust-lang.org/reference.html#appendix-influences)
     * `#[bench]`
 
 * cargo kompiliert, dokumentiert, testet, benchmarkt und publisht
+
+## Cargo
+
+* cargo as package manager and build system
+* crates.io as repo, extern git repositories, explizite
+* Gleich benutzen
+* Macht den Umgang mit external crates möglich
+
+## Wohin mit dem Code?
+
+* Libraries: `src/**/lib.rs`
+* Binaries: `src/main.rs src/bin/*.rs`
 
 
 # Beispiele
@@ -421,17 +440,6 @@ fn main() {
 * http://cglab.ca/~abeinges/blah/turpl/_book/
 
 
-## Cargo
-
-* cargo as package manager and build system
-* crates.io as repo, extern git repositories, explizite
-* Gleich benutzen
-* Macht den Umgang mit external crates möglich
-
-## Wohin mit dem Code?
-
-* Libraries: `src/**/lib.rs`
-* Binaries: `src/main.rs src/bin/*.rs`
 
 ## Cargo.toml
 
