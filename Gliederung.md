@@ -12,7 +12,7 @@
 ## Rust powers:
 
 * Servo *(super cool fast browser engine)*
-* machine learning tools ( [leaf](https://github.com/autumnai/leaf), [rustlearn](https://github.com/maciejkula/rustlearn))
+* machine learning tools ([leaf](https://github.com/autumnai/leaf), [rustlearn](https://github.com/maciejkula/rustlearn))
 * safe parsers ([nom](https://github.com/Geal/nom))
 * [seL4 stack](https://robigalia.org/)
 * everything else
@@ -28,7 +28,7 @@
 
 ## wie c++
 
-* statisch kompiliert ( LLVM )
+* statisch kompiliert *LLVM*
 * scheiße schnell
 * zero cost abstractions
 * kein garbage-collector
@@ -38,13 +38,14 @@
 
 * streng getypt
 * Hindley-Milner type system
-* immutable variables
+* immutable by default
+* ziemlich funktional
 
 ## wie ruby oder python
 
 * expressive Syntax
 * gut zu lesen
-* build system und Packetmanager (cargo & crates.io)
+* Buildsystem und Paketmanager (cargo & crates.io)
 
 ## wie rust!
 
@@ -59,9 +60,10 @@
 * **ML Kit, Cyclone:** region based memory management
 * **Haskell (GHC):** typeclasses, type families
 * **Newsqueak, Alef, Limbo:** channels, concurrency
-* **Erlang:** message passing, thread failure
 
-## Einflüße 2
+## Einflüße
+
+* **Erlang:** message passing, thread failure
 * **Swift:** optional bindings
 * **Scheme:** hygienic macros
 * **C#:** attributes
@@ -98,10 +100,119 @@ siehe: [influence](http://doc.rust-lang.org/reference.html#appendix-influences)
 ## Ökosystem
 
 * Dokumentation ist TopPriority
-* in-line Tests und Benchmarks (`#[test]` und `#[bench]`)
+* in-line Tests und Benchmarks
+    * `#[test]`
+    * `#[bench]`
+
 * cargo kompiliert, dokumentiert, testet, benchmarkt und publisht
 
-# Details
+
+# Beispiele
+
+## Hello world
+
+```rust
+fn main(){
+  println!("hello world");
+}
+
+* macro
+```
+
+## Formatted Print
+
+```rust
+fn main() {
+
+    println!("{} entspricht {:b} ", 42, 42);
+
+    println!("{0}, this is {1}. {1}, this is {0}", "Alice", "Bob");
+
+    // As can named arguments.
+    println!("Themenabend   \"{subject}\"", subject="Rust",);
+
+    // Alignment
+    println!("{number:>width$}", number=1, width=6);
+    println!("{number:>0width$}", number=1, width=6);
+
+}
+```
+
+## Debug Print
+
+```rust
+fn main(){
+
+    #[derive(Debug)]
+    struct Themenabend{
+      number: i32,
+      title: &'static str,
+    };
+
+    println!("Interne Struktur von {:?}",
+    Themenabend{
+      number:3,
+      title:"Rust Themenabend"
+    });
+}
+```
+
+# Datentypen
+
+## Vectors
+
+```rust
+fn main() {
+let _list = vec![1,2,3,4];
+
+// entspricht
+
+let _list2 = {
+  let mut list = Vec::new();
+  list.push(1);
+  list.push(2);
+  //...
+  list
+};
+
+let _range: Vec<i32> = (0..10).collect();
+}
+```
+
+## Options
+```rust
+fn divide(a:i32, b:i32) -> Option<i32>{
+  if b == 0 {
+    None
+  } else { Some(a/b) }
+}
+
+fn main(){
+  println!("12/3 = {:?}", divide(12,3));
+  println!("12/0 = {:?}", divide(12,0));
+}
+```
+
+## Primitive
+
+```rust
+fn main(){
+  let one = 1u32;
+  let fourtytwo= 0b101010;
+  let goku = 9_001;
+  let ladies = ("x","y");
+}
+```
+
+## Pointers
+
+```rust
+fn main(){
+  let sushi = Box::new(("rice", "fish"));
+}
+```
+
+# Sicher, schnell, wie?
 
 ## Memory Model
 
@@ -109,13 +220,105 @@ siehe: [influence](http://doc.rust-lang.org/reference.html#appendix-influences)
 * keine manuelle Speicherverwaltung
 * **borrow checker** forciert Ownership and Move Semantics
 
-## Wie jetzt?
+## Move Semantics 1/2
 
-* a reference to a resource is "borrowed"
-* only one party can mutate resources
-* Move Semantics are implicitly part of the language
-* there is one concrete owner to everything
-* racing code would not even compile
+```rust
+fn main(){
+  let list = vec![1,2,3];
+  let x = list;
+  let y = list;
+}
+```
+
+## Move Semantics 2/2
+
+```rust
+fn do_some(_foo:Vec<i32>){
+    // konsumiert `foo`
+}
+
+fn main(){
+  let list = vec![1,2,3];
+  println!("{}", list[0]);
+  do_some(list);
+  println!("{}", list[0]); // fails
+}
+```
+
+## Sharing is Caring
+
+
+```rust
+fn main(){
+  let list = vec![1,2,3];
+  let x = &list;
+  let y = list;
+}
+```
+
+## Borrowing
+
+```rust
+fn do_some(_foo:&Vec<i32>){
+}
+
+fn main(){
+  let list = vec![1,2,3];
+  println!("{}", list[0]);
+
+  do_some(&list);          // explitzit
+  println!("{}", list[0]); // fails no more
+}
+```
+
+## References at a glance
+
+* `T` Basistyp
+* `mut T` veränderlicher Typ
+* `&T` read-only Referenz
+  * niemand kann schreiben
+* `&mut T` schreibbare Referenze
+  * nur einer kann schreiben
+
+## Beispiele
+
+```rust-norun
+fn read(v: &Vec<String>) -> String {
+    let first: &String = &v[0]; // borrow ref to first elem
+    println!("v[0]: {}", first);
+    return first.clone();
+}
+```
+
+```rust-norun
+fn modify(v: &mut Vec<String>, name: &str) {
+    let freshly_created = format!("Hello {}", name);
+    v.push(freshly_created);
+}
+```
+
+```rust-norun
+fn consume(v: Vec<String>) -> String {
+    for s in v { return s; }
+    panic!("v was empty?!?");
+}
+```
+
+```rust-norun
+fn read(v: &Vec<String>) -> String { ... }
+fn modify(v: &mut Vec<String>, name: &str) { ... }
+fn consume(v: Vec<String>) -> String { ... }
+```
+
+# OOP ?
+
+## Structs und Enums
+
+## Impl
+
+## Traits
+
+-------------------------------------
 
 # here be dragons
 
