@@ -51,6 +51,7 @@
 <li>machine learning tools (<a href="https://github.com/autumnai/leaf">leaf</a>, <a href="https://github.com/maciejkula/rustlearn">rustlearn</a>)</li>
 <li>safe parsers (<a href="https://github.com/Geal/nom">nom</a>)</li>
 <li><a href="https://robigalia.org/">seL4 stack</a></li>
+<li>Maidsafe</li>
 <li>everything else</li>
 </ul>
 </section></section>
@@ -68,6 +69,7 @@
 <li>statisch kompiliert <em>LLVM</em></li>
 <li>scheiße schnell</li>
 <li>zero cost abstractions</li>
+<li>generic</li>
 <li>kein garbage-collector</li>
 <li><strong>low level</strong></li>
 </ul>
@@ -76,15 +78,16 @@
 <ul>
 <li>streng getypt</li>
 <li>Hindley-Milner type system</li>
-<li>immutable by default</li>
-<li>ziemlich funktional</li>
+<li>immutable variables</li>
+<li>pattern matching</li>
+<li>λ-ausdrücke/closures</li>
 </ul>
 </section><section id="wie-ruby-oder-python" class="slide level2">
 <h1>wie ruby oder python</h1>
 <ul>
 <li>expressive Syntax</li>
 <li>gut zu lesen</li>
-<li>Buildsystem und Paketmanager (cargo &amp; crates.io)</li>
+<li>build system und Packetmanager (cargo &amp; crates.io)</li>
 </ul>
 </section><section id="wie-rust" class="slide level2">
 <h1>wie rust!</h1>
@@ -160,7 +163,7 @@
 <h1>Formatted Print</h1>
 <pre class="rust"><code>fn main() {
 
-    println!(&quot;{0} entspricht {0:b} &quot;, 42);
+    println!(&quot;{} entspricht {:b} &quot;, 42, 42);
 
     println!(&quot;{0}, this is {1}. {1}, this is {0}&quot;, &quot;Alice&quot;, &quot;Bob&quot;);
 
@@ -238,6 +241,7 @@ fn main(){
 <li>kein GarbageCollector</li>
 <li>keine manuelle Speicherverwaltung</li>
 <li><strong>borrow checker</strong> forciert Ownership and Move Semantics</li>
+<li>Destruktor: <code>trait Drop</code></li>
 </ul>
 </section><section id="move-semantics-12" class="slide level2">
 <h1>Move Semantics 1/2</h1>
@@ -399,66 +403,37 @@ fn main() {
 <section><section id="extension-slides" class="titleslide slide level1"><h1>Extension Slides</h1></section><section id="section" class="slide level2">
 <h1></h1>
 </section></section>
-<section><section id="alternatives-to-rust" class="titleslide slide level1"><h1>alternatives to Rust?</h1></section><section id="go" class="slide level2">
-<h1>Go</h1>
+<section><section id="eco-system" class="titleslide slide level1"><h1>eco system</h1></section><section id="community-and-documentation" class="slide level2">
+<h1>Community and Documentation</h1>
 <ul>
-<li>(+) compiles faster than rust</li>
-<li>(+) statically compiled and linked</li>
-<li>(-) strange design decisions</li>
-<li>(-) nothing groundbreaking</li>
-<li>(-) garbage collected</li>
-<li>(-) completely separate toolchain</li>
-<li>-&gt; more competition to java</li>
+<li>users.rust-lang.org</li>
+<li>http://rustbyexample.com/</li>
+<li>http://doc.rust-lang.org/stable/book/</li>
+<li>http://www.reddit.com/r/rust</li>
+<li>http://rustyrad.io/</li>
+<li>http://this-week-in-rust.org/</li>
+<li>http://cglab.ca/~abeinges/blah/turpl/_book/</li>
 </ul>
-</section><section id="c17-gsl" class="slide level2">
-<h1>C++17 + GSL</h1>
+</section><section id="cargo" class="slide level2">
+<h1>Cargo</h1>
 <ul>
-<li>(+) fits in existing codebase</li>
-<li>(-) reiteration of codebase necessary</li>
-<li>(-) large language, old style still possible</li>
-<li>(-) language makes static compile time checks nontrivial</li>
+<li>cargo as package manager and build system</li>
+<li>crates.io as repo, extern git repositories, explizite</li>
+<li>Gleich benutzen</li>
+<li>Macht den Umgang mit external crates möglich</li>
 </ul>
-</section><section id="haskell" class="slide level2">
-<h1>Haskell</h1>
+</section><section id="wohin-mit-dem-code" class="slide level2">
+<h1>Wohin mit dem Code?</h1>
 <ul>
-<li>(+) safe</li>
-<li>(-) not intended for systems programming</li>
+<li>Libraries: <code>src/**/lib.rs</code></li>
+<li>Binaries: <code>src/main.rs src/bin/*.rs</code></li>
 </ul>
-</section><section id="swift" class="slide level2">
-<h1>Swift</h1>
-<ul>
-<li>no garbage collection, by reference counting</li>
-<li><code>Optional</code> is similar to <code>Option&lt;T&gt;</code>, but equivalent to <code>Result&lt;T&gt;</code> is 3rd party</li>
-</ul>
-</section><section id="disadvantages-of-rust" class="slide level2">
-<h1>disadvantages of Rust</h1>
-<ul>
-<li>price of safety: may slightly reduce performance</li>
-<li>bigger bins</li>
-<li>ABI compatible with C but not with C++, requires wrappers or <code>extern c</code></li>
-<li>static linking by default</li>
-<li>builds against glibc, musl (experimental), uclibc (not tested)</li>
-</ul>
-<!--
-# Community and Documentation
-
-## Community and Documentation
-
-* users.rust-lang.org
-* http://rustbyexample.com/
-* http://doc.rust-lang.org/stable/book/
-* http://www.reddit.com/r/rust
-* http://rustyrad.io/
-* http://this-week-in-rust.org/
-* http://cglab.ca/~abeinges/blah/turpl/_book/
-
-# eco system
-* cargo as package manager and build system
-* crates.io as repo, extern git repositories, explizite
-
--->
-
-
+</section><section id="cargo.toml" class="slide level2">
+<h1>Cargo.toml</h1>
+<p>ownership/borrowing: use-case cache</p>
+<p>struct Cache { cached: Option<i32>; }</p>
+<p>impl Cache { pub fn get(&amp;mut self) -&gt; &amp;i32 { match self.cached { Some(ref cached) =&gt; cached; None =&gt; { self.cached = 32; &amp;self.cached } } } }</p>
+<p>Typing-Beispiele: Fresh in Hyper, pulse-simple</p>
 </section></section>
     </div>
   </div>

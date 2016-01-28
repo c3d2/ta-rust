@@ -407,46 +407,8 @@ fn main() {
 
 ##
 
-# alternatives to Rust?
+# eco system
 
-## Go
-
- * (+) compiles faster than rust
- * (+) statically compiled and linked
- * (-) strange design decisions
- * (-) nothing groundbreaking
- * (-) garbage collected
- * (-) completely separate toolchain
- *  -> more competition to java
-
-## C++17 + GSL
-
-  * (+) fits in existing codebase
-  * (-) reiteration of codebase necessary
-  * (-) large language, old style still possible
-  * (-) language makes static compile time checks nontrivial
-
-## Haskell
-
-  * (+) safe
-  * (-) not intended for systems programming
-
-## Swift
-
-  * no garbage collection, by reference counting
-  * `Optional` is similar to `Option<T>`, but equivalent to `Result<T>` is 3rd party
-
-## disadvantages of Rust
-
-* price of safety: may slightly reduce performance
-* bigger bins
-* ABI compatible with C but not with C++, requires wrappers or `extern c`
-* static linking by default
-* builds against glibc, musl (experimental), uclibc (not tested)
-
-
-<!--
-# Community and Documentation
 
 ## Community and Documentation
 
@@ -458,14 +420,11 @@ fn main() {
 * http://this-week-in-rust.org/
 * http://cglab.ca/~abeinges/blah/turpl/_book/
 
-# eco system
+
+## Cargo
+
 * cargo as package manager and build system
 * crates.io as repo, extern git repositories, explizite
-
--->
-
-# Cargo
-
 * Gleich benutzen
 * Macht den Umgang mit external crates möglich
 
