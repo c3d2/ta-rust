@@ -33,6 +33,10 @@ Array.prototype.forEach.call(elements, function(el) {
 });
 
 $(document).ready(function() {
+  $( 'pre.cpp code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+
   $( 'pre.rust-norun code').each(function(i, block) {
     hljs.highlightBlock(block);
   });

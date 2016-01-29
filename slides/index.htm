@@ -358,7 +358,7 @@ let v_ref:&amp;mut Vec&lt;i32&gt; = &amp;mut v;</code></pre>
 <pre class="rust-norun"><code>fn read(v: &amp;Vec&lt;String&gt;) -&gt; String {
     let first: &amp;String = &amp;v[0]; // borrow ref to first elem
     println!(&quot;v[0]: {}&quot;, first);
-    return first.clone();
+    first.clone()
 }</code></pre>
 </div>
 <div class="fragment">
@@ -379,10 +379,121 @@ fn modify(v: &amp;mut Vec&lt;String&gt;, name: &amp;str) { ... }
 fn consume(v: Vec&lt;String&gt;) -&gt; String { ... }</code></pre>
 </div>
 </section></section>
-<section><section id="oop" class="titleslide slide level1"><h1>OOP ?</h1></section><section id="structs-und-enums" class="slide level2">
-<h1>Structs und Enums</h1>
+<section><section id="control-flow" class="titleslide slide level1"><h1>Control Flow</h1></section><section id="what-if" class="slide level2">
+<h1>what if?</h1>
+<pre class="rust-norun"><code>let x = 5;
+if x == 5 {
+    println!(&quot;x is five!&quot;);
+} else if x == 6 {
+    println!(&quot;x is six!&quot;);
+} else {
+    println!(&quot;x is not five or six :(&quot;);
+}</code></pre>
+<div class="fragment">
+<pre class="rust-norun"><code>let y = if x == 5 {
+    10
+} else {
+    15
+}; // y: i32</code></pre>
+</div>
+</section><section id="switch-cases" class="slide level2">
+<h1>Switch cases?</h1>
+<pre class="cpp"><code>int main(){
+    int auswahl;
+
+    cout &lt;&lt; &quot;Wählen Sie Ihre Lieblingsleckerei:\n&quot;
+            &quot;1 - Käsesahnetorte\n&quot;
+            &quot;2 - Streuselkuchen\n&quot;
+            &quot;3 - Windbeutel\n&quot;;
+
+    cin &gt;&gt; auswahl;
+
+    switch(auswahl){
+        case 1:  cout &lt;&lt; &quot;Käsesahnetorte!&quot;;
+        case 2:  cout &lt;&lt; &quot;Streuselkuchen&quot;;
+        case 3:  cout &lt;&lt; &quot;Windbeutel&quot;;
+        default: cout &lt;&lt; &quot;Nein Danke&quot;;
+    }
+}</code></pre>
+<div class="fragment">
+<pre><code>Streuselkuchen Windbeutel Nein Danke</code></pre>
+</div>
+</section><section id="matching" class="slide level2">
+<h1>Matching</h1>
+<pre class="rust-norun"><code>let auswahl = 2;
+match auswahl {
+        1 =&gt; println!(&quot;Käsesahnetorte!&quot;),
+        2 =&gt; println!(&quot;Streuselkuchen&quot;),
+        3 =&gt; println!(&quot;Windbeutel&quot;),
+        _ =&gt; println!(&quot;Nein Danke&quot;)
+}</code></pre>
+<pre class="rust-norun"><code>match x {
+    1 | 2 =&gt; println!(&quot;one or two&quot;),
+    3 =&gt; println!(&quot;three&quot;),
+    _ =&gt; println!(&quot;anything&quot;),
+}</code></pre>
+<pre class="rust-norun"><code>let origin = Point { x: 0, y: 0 };
+match origin {
+    Point { y, .. } =&gt; println!(&quot;y is {}&quot;, y),
+}</code></pre>
+<pre class="rust-norun"><code>match &#39;f&#39; {
+    &#39;a&#39; ... &#39;j&#39; =&gt; println!(&quot;early letter&quot;),
+    &#39;k&#39; ... &#39;z&#39; =&gt; println!(&quot;late letter&quot;),
+    _ =&gt; println!(&quot;something else&quot;),
+}</code></pre>
+</section><section id="loops" class="slide level2">
+<h1>loops</h1>
+<pre class="rust-norun"><code>loop {
+    println!(&quot;Loop forever!&quot;);
+}</code></pre>
+<div class="fragment">
+<pre class="rust-norun"><code>while !done {
+    x += x - 3;
+
+    println!(&quot;{}&quot;, x);
+
+    if x % 5 == 0 { done = true; }
+}
+</code></pre>
+</div>
+</section></section>
+<section><section id="oop" class="titleslide slide level1"><h1>OOP ?</h1></section><section id="struct-und-enum" class="slide level2">
+<h1>struct und enum</h1>
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32 }</code></pre>
+<div class="fragment">
+<pre class="rust-norun"><code>enum Message {
+    Quit,
+    ChangeColor(i32, i32, i32),
+    Move { x: i32, y: i32 },
+    Write(String),
+}</code></pre>
+</div>
 </section><section id="impl" class="slide level2">
 <h1>Impl</h1>
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32 }
+
+impl Point {
+    fn distance_from_origin(&amp;self) -&gt; i32 {
+        let Point { x, y } = *self;
+        let sum = (x*x + y*y) as f64;
+        sum.sqrt() as i32
+    }
+}</code></pre>
+<div class="fragment">
+<ul>
+<li><code>self</code> : Kurz für <code>self:Self</code>, konsumiert</li>
+<li><code>&amp;self</code> : Read-only</li>
+<li><code>&amp;mut self</code> : Read-Write</li>
+</ul>
+</div>
+</section><section id="drop" class="slide level2">
+<h1>Drop</h1>
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32 }
+
+impl Point {
+    fn Drop(self) {
+    }
+}</code></pre>
 </section><section id="traits" class="slide level2">
 <h1>Traits</h1>
 </section><section class="slide level2">

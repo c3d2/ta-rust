@@ -350,7 +350,7 @@ let v_ref:&mut Vec<i32> = &mut v;
 fn read(v: &Vec<String>) -> String {
     let first: &String = &v[0]; // borrow ref to first elem
     println!("v[0]: {}", first);
-    return first.clone();
+    first.clone()
 }
 ```
 
@@ -380,11 +380,167 @@ fn modify(v: &mut Vec<String>, name: &str) { ... }
 fn consume(v: Vec<String>) -> String { ... }
 ```
 
+# Control Flow
+
+## what if?
+
+```rust-norun
+let x = 5;
+if x == 5 {
+    println!("x is five!");
+} else if x == 6 {
+    println!("x is six!");
+} else {
+    println!("x is not five or six :(");
+}
+```
+
+. . .
+
+```rust-norun
+let y = if x == 5 {
+    10
+} else {
+    15
+}; // y: i32
+```
+
+## Switch cases?
+
+```cpp
+int main(){
+    int auswahl;
+
+    cout << "Wählen Sie Ihre Lieblingsleckerei:\n"
+            "1 - Käsesahnetorte\n"
+            "2 - Streuselkuchen\n"
+            "3 - Windbeutel\n";
+
+    cin >> auswahl;
+
+    switch(auswahl){
+        case 1:  cout << "Käsesahnetorte!";
+        case 2:  cout << "Streuselkuchen";
+        case 3:  cout << "Windbeutel";
+        default: cout << "Nein Danke";
+    }
+}
+```
+
+. . .
+
+```
+Streuselkuchen Windbeutel Nein Danke
+```
+
+## Matching
+
+```rust-norun
+let auswahl = 2;
+match auswahl {
+		1 => println!("Käsesahnetorte!"),
+		2 => println!("Streuselkuchen"),
+		3 => println!("Windbeutel"),
+		_ => println!("Nein Danke")
+}
+```
+
+```rust-norun
+match x {
+    1 | 2 => println!("one or two"),
+    3 => println!("three"),
+    _ => println!("anything"),
+}
+```
+
+```rust-norun
+let origin = Point { x: 0, y: 0 };
+match origin {
+    Point { y, .. } => println!("y is {}", y),
+}
+```
+
+```rust-norun
+match 'f' {
+    'a' ... 'j' => println!("early letter"),
+    'k' ... 'z' => println!("late letter"),
+    _ => println!("something else"),
+}
+```
+
+## loops
+
+```rust-norun
+loop {
+    println!("Loop forever!");
+}
+```
+
+. . .
+
+```rust-norun
+while !done {
+    x += x - 3;
+
+    println!("{}", x);
+
+    if x % 5 == 0 { done = true; }
+}
+
+```
+
+
 # OOP ?
 
-## Structs und Enums
+## struct und enum
+
+
+```rust-norun
+struct Point { x: i32, y: i32 }
+```
+
+. . .
+
+```rust-norun
+enum Message {
+    Quit,
+    ChangeColor(i32, i32, i32),
+    Move { x: i32, y: i32 },
+    Write(String),
+}
+```
+
 
 ## Impl
+
+```rust-norun
+struct Point { x: i32, y: i32 }
+
+impl Point {
+    fn distance_from_origin(&self) -> i32 {
+        let Point { x, y } = *self;
+        let sum = (x*x + y*y) as f64;
+        sum.sqrt() as i32
+    }
+}
+```
+
+. . .
+
+ * `self` : Kurz für `self:Self`, konsumiert
+ * `&self` : Read-only
+ * `&mut self` : Read-Write
+
+## Drop
+
+```rust-norun
+struct Point { x: i32, y: i32 }
+
+impl Point {
+    fn Drop(self) {
+    }
+}
+```
 
 ## Traits
 
