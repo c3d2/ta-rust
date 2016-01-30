@@ -667,4 +667,137 @@ impl Cache {
     }
 }
 
-Typing-Beispiele: Fresh in Hyper, pulse-simple
+
+# Beispiel für Parameterisierte Typen
+
+## Fresh in Hyper
+
+
+# Beispiel für Parameterisierte Typen
+
+## Pulseaudio-API
+
+* rust-bindgen
+* https://crates.io/crates/libpulse-sys
+
+## Pulseaudio-API: Benutzung
+
+```rust-norun
+let ss = pa_sample_spec {
+    format: PA_SAMPLE_S16LE,
+    channels: 1,
+    rate: 48000
+};
+let s = unsafe {
+    let name_c = CString::new("Rust!").unwrap();
+    let desc_c = CString::new("Example").unwrap();
+    pa_simple_new(null(),
+                  name_c.as_ptr() as *const i8,
+                  PA_STREAM_PLAYBACK,
+                  null(),
+                  desc_c.as_ptr() as *const i8,
+                  &ss,
+                  null(),
+                  null(),
+                  null_mut(),
+                 )
+};
+```
+```rust-norun
+let res = unsafe {
+    pa_simple_write(s, mem::transmute(buf), 2 * SAMPLES, null_mut())
+};
+```
+
+## Crate pulse-simple
+
+```rust-norun
+const RATE: u32 = 48000;
+let p = Playback::new("Example", "Playback", RATE);
+
+// Generate 1s of sound
+let mut data = Vec::with_capacity(RATE as usize);
+for i in 0..RATE {
+    let t = i as f64 / RATE as f64;
+    let make_freq = |f: f64| ((std::i16::MAX as f64) * (f * 2.0 * PI * t).sin()) as i16;
+    data.push([make_freq(440.0), make_freq(330.0)]);
+}
+
+// Play in a loop
+loop {
+    p.write(&data[..]);
+}
+```
+
+## Crate pulse-simple: Playback
+
+```rust-norun
+pub struct Playback<C: ChannelCount> {
+    client: SimpleClient<C>
+}
+
+impl<C: ChannelCount> Playback<C> {
+    pub fn new(name: &str, desc: &str, rate: u32) -> Self {
+        Playback {
+            client: SimpleClient::new(name, desc, PA_STREAM_PLAYBACK, rate)
+        }
+    }
+
+    pub fn write(&self, data: &[C]) {
+        let res = unsafe {
+            let ptr = transmute(data.as_ptr());
+            pa_simple_write(self.client.simple, ptr, data.len() * C::sample_size(), null_mut())
+        };
+        assert!(res == 0);
+    }
+}
+```
+
+## Crate pulse-simple: SimpleClient
+
+```rust-norun
+struct SimpleClient<C: ChannelCount> {
+    simple: *mut pa_simple,
+    phantom: PhantomData<C>,
+}
+
+impl<C: ChannelCount> SimpleClient<C> {
+    fn new(name: &str, desc: &str, dir: pa_stream_direction_t, rate: u32) -> Self {
+        let ss = pa_sample_spec {
+            format: C::format(),
+            channels: C::count(),
+            rate: rate
+        };
+        let name_c = CString::new(name).unwrap();
+        let desc_c = CString::new(desc).unwrap();
+        let s = unsafe {
+            pa_simple_new(null(), name_c.as_ptr() as *const i8,
+                          dir, null(),
+                          desc_c.as_ptr() as *const i8, &ss,
+                          null(), null(), null_mut()
+                         )
+        };
+        assert!(s != null_mut());
+        SimpleClient {
+            simple: s,
+            phantom: PhantomData
+        }
+    }
+}
+```
+
+## Crate pulse-simple: ChannelCount
+
+```rust-norun
+pub trait ChannelCount {
+    fn count() -> u8;
+
+    type S: Sampleable;
+    fn format() -> pa_sample_format_t {
+        Self::S::format()
+    }
+    fn sample_size() -> usize {
+        Self::count() as usize * size_of::<Self::S>()
+    }
+}
+```

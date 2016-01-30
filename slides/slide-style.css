@@ -59,3 +59,19 @@ div.screen_grab img {
 }
 
 .strike { text-decoration: line-through; color: #8f4040; }
+
+
+.rust .runlink {
+  visibility: hidden;
+  float: right;
+  margin: 0;
+  padding: 2px 4px;
+  background-color: #7f3f00;
+  color: white;
+  border: 1px solid black;
+  border-radius: 1.5px;
+  font-weight: bold;
+}
+.rust:hover .runlink {
+  visibility: visible;
+}
