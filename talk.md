@@ -672,6 +672,7 @@ impl Cache {
 
 ## Fresh in Hyper
 
+...
 
 # Beispiel für Parameterisierte Typen
 
