@@ -643,38 +643,25 @@ fn main() {
 * http://cglab.ca/~abeinges/blah/turpl/_book/
 
 
-
-## Cargo.toml
-
-
-
-
-ownership/borrowing: use-case cache
-
-struct Cache {
-    cached: Option<i32>;
-}
-
-impl Cache {
-    pub fn get(&mut self) -> &i32 {
-        match self.cached {
-            Some(ref cached) => cached;
-            None => {
-                self.cached = 32;
-                &self.cached
-            }
-        }
-    }
-}
-
-
 # Beispiel für Parameterisierte Typen
 
 ## Fresh in Hyper
 
-...
+Motivation: HTTP Response Headers können nur geändert werden wenn Body
+noch nicht gesendet wird.
 
-# Beispiel für Parameterisierte Typen
+```rust-norun
+pub trait Handler: Sync + Send {
+    fn handle<'a, 'k>(&'a self, Request<'a, 'k>, Response<'a, Fresh>);
+    // ...
+}
+
+impl<'a> Response<'a, Fresh> {
+    fn start(self) -> Result<Response<'a, Streaming>> {
+        // ...
+    }
+}
+```
 
 ## Pulseaudio-API
 
