@@ -396,6 +396,18 @@ if x == 5 {
     15
 }; // y: i32</code></pre>
 </div>
+</section><section id="expressions-vs-statements" class="slide level2">
+<h1>Expressions vs Statements</h1>
+<pre class="rust-norun"><code>fn add(a:i32, b:i32) -&gt; i32 {
+  a+b
+}</code></pre>
+<div class="fragment">
+<pre class="rust"><code>fn main(){
+  let x = 2;
+  let foo = if x &gt; 1 {&quot;enough&quot;} else {&quot;to few&quot;};
+  println!(&quot;x = {} -&gt; {:?}&quot;, x, foo);
+}</code></pre>
+</div>
 </section><section id="switch-cases" class="slide level2">
 <h1>Switch cases?</h1>
 <pre class="cpp"><code>int main(){
@@ -427,7 +439,7 @@ match auswahl {
         3 =&gt; println!(&quot;Windbeutel&quot;),
         _ =&gt; println!(&quot;Nein Danke&quot;)
 }</code></pre>
-<pre class="rust-norun"><code>match x {
+<pre class="rust-norun"><code>let foo = match x {
     1 | 2 =&gt; println!(&quot;one or two&quot;),
     3 =&gt; println!(&quot;three&quot;),
     _ =&gt; println!(&quot;anything&quot;),
@@ -594,12 +606,131 @@ fn main() {
 <li>http://this-week-in-rust.org/</li>
 <li>http://cglab.ca/~abeinges/blah/turpl/_book/</li>
 </ul>
-</section><section id="cargo.toml" class="slide level2">
-<h1>Cargo.toml</h1>
-<p>ownership/borrowing: use-case cache</p>
-<p>struct Cache { cached: Option<i32>; }</p>
-<p>impl Cache { pub fn get(&amp;mut self) -&gt; &amp;i32 { match self.cached { Some(ref cached) =&gt; cached; None =&gt; { self.cached = 32; &amp;self.cached } } } }</p>
-<p>Typing-Beispiele: Fresh in Hyper, pulse-simple</p>
+</section></section>
+<section><section id="beispiel-für-parameterisierte-typen" class="titleslide slide level1"><h1>Beispiel für Parameterisierte Typen</h1></section><section id="fresh-in-hyper" class="slide level2">
+<h1>Fresh in Hyper</h1>
+<p>Motivation: HTTP Response Headers können nur geändert werden wenn Body noch nicht gesendet wird.</p>
+<pre class="rust-norun"><code>pub trait Handler: Sync + Send {
+    fn handle&lt;&#39;a, &#39;k&gt;(&amp;&#39;a self, Request&lt;&#39;a, &#39;k&gt;, Response&lt;&#39;a, Fresh&gt;);
+    // ...
+}
+
+impl&lt;&#39;a&gt; Response&lt;&#39;a, Fresh&gt; {
+    fn start(self) -&gt; Result&lt;Response&lt;&#39;a, Streaming&gt;&gt; {
+        // ...
+    }
+}</code></pre>
+</section><section id="pulseaudio-api" class="slide level2">
+<h1>Pulseaudio-API</h1>
+<ul>
+<li>rust-bindgen</li>
+<li>https://crates.io/crates/libpulse-sys</li>
+</ul>
+</section><section id="pulseaudio-api-benutzung" class="slide level2">
+<h1>Pulseaudio-API: Benutzung</h1>
+<pre class="rust-norun"><code>let ss = pa_sample_spec {
+    format: PA_SAMPLE_S16LE,
+    channels: 1,
+    rate: 48000
+};
+let s = unsafe {
+    let name_c = CString::new(&quot;Rust!&quot;).unwrap();
+    let desc_c = CString::new(&quot;Example&quot;).unwrap();
+    pa_simple_new(null(),
+                  name_c.as_ptr() as *const i8,
+                  PA_STREAM_PLAYBACK,
+                  null(),
+                  desc_c.as_ptr() as *const i8,
+                  &amp;ss,
+                  null(),
+                  null(),
+                  null_mut(),
+                 )
+};</code></pre>
+<pre class="rust-norun"><code>let res = unsafe {
+    pa_simple_write(s, mem::transmute(buf), 2 * SAMPLES, null_mut())
+};</code></pre>
+</section><section id="crate-pulse-simple" class="slide level2">
+<h1>Crate pulse-simple</h1>
+<pre class="rust-norun"><code>const RATE: u32 = 48000;
+let p = Playback::new(&quot;Example&quot;, &quot;Playback&quot;, RATE);
+
+// Generate 1s of sound
+let mut data = Vec::with_capacity(RATE as usize);
+for i in 0..RATE {
+    let t = i as f64 / RATE as f64;
+    let make_freq = |f: f64| ((std::i16::MAX as f64) * (f * 2.0 * PI * t).sin()) as i16;
+    data.push([make_freq(440.0), make_freq(330.0)]);
+}
+
+// Play in a loop
+loop {
+    p.write(&amp;data[..]);
+}</code></pre>
+</section><section id="crate-pulse-simple-playback" class="slide level2">
+<h1>Crate pulse-simple: Playback</h1>
+<pre class="rust-norun"><code>pub struct Playback&lt;C: ChannelCount&gt; {
+    client: SimpleClient&lt;C&gt;
+}
+
+impl&lt;C: ChannelCount&gt; Playback&lt;C&gt; {
+    pub fn new(name: &amp;str, desc: &amp;str, rate: u32) -&gt; Self {
+        Playback {
+            client: SimpleClient::new(name, desc, PA_STREAM_PLAYBACK, rate)
+        }
+    }
+
+    pub fn write(&amp;self, data: &amp;[C]) {
+        let res = unsafe {
+            let ptr = transmute(data.as_ptr());
+            pa_simple_write(self.client.simple, ptr, data.len() * C::sample_size(), null_mut())
+        };
+        assert!(res == 0);
+    }
+}</code></pre>
+</section><section id="crate-pulse-simple-simpleclient" class="slide level2">
+<h1>Crate pulse-simple: SimpleClient</h1>
+<pre class="rust-norun"><code>struct SimpleClient&lt;C: ChannelCount&gt; {
+    simple: *mut pa_simple,
+    phantom: PhantomData&lt;C&gt;,
+}
+
+impl&lt;C: ChannelCount&gt; SimpleClient&lt;C&gt; {
+    fn new(name: &amp;str, desc: &amp;str, dir: pa_stream_direction_t, rate: u32) -&gt; Self {
+        let ss = pa_sample_spec {
+            format: C::format(),
+            channels: C::count(),
+            rate: rate
+        };
+        let name_c = CString::new(name).unwrap();
+        let desc_c = CString::new(desc).unwrap();
+        let s = unsafe {
+            pa_simple_new(null(), name_c.as_ptr() as *const i8,
+                          dir, null(),
+                          desc_c.as_ptr() as *const i8, &amp;ss,
+                          null(), null(), null_mut()
+                         )
+        };
+        assert!(s != null_mut());
+        SimpleClient {
+            simple: s,
+            phantom: PhantomData
+        }
+    }
+}</code></pre>
+</section><section id="crate-pulse-simple-channelcount" class="slide level2">
+<h1>Crate pulse-simple: ChannelCount</h1>
+<pre class="rust-norun"><code>pub trait ChannelCount {
+    fn count() -&gt; u8;
+
+    type S: Sampleable;
+    fn format() -&gt; pa_sample_format_t {
+        Self::S::format()
+    }
+    fn sample_size() -&gt; usize {
+        Self::count() as usize * size_of::&lt;Self::S&gt;()
+    }
+}</code></pre>
 </section></section>
     </div>
   </div>

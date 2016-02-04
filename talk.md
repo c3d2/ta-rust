@@ -2,6 +2,8 @@
 % astro und hoodie
 % February 10, 2016
 
+<!-- vim:set nospell: -->
+
 # Was ist Rust?
 
 ## eine Programmiersprache!
@@ -211,7 +213,7 @@ pub enum Option<T> {
 }
 ```
 
-. . . 
+. . .
 
 ```rust
 fn divide(a:i32, b:i32) -> Option<i32>{
@@ -402,7 +404,25 @@ let y = if x == 5 {
     10
 } else {
     15
-}; // y: i32
+}; // y = i32
+```
+
+## Expressions vs Statements
+
+```rust-norun
+fn add(a:i32, b:i32) -> i32 {
+  a+b
+}
+```
+
+. . .
+
+```rust
+fn main(){
+  let x = 2;
+  let foo = if x > 1 {"enough"} else {"to few"};
+  println!("x = {} -> {:?}", x, foo);
+}
 ```
 
 ## Switch cases?
@@ -429,9 +449,7 @@ int main(){
 
 . . .
 
-```
-Streuselkuchen Windbeutel Nein Danke
-```
+    Streuselkuchen Windbeutel Nein Danke
 
 ## Matching
 
@@ -446,7 +464,7 @@ match auswahl {
 ```
 
 ```rust-norun
-match x {
+let foo = match x {
     1 | 2 => println!("one or two"),
     3 => println!("three"),
     _ => println!("anything"),
@@ -488,7 +506,6 @@ while !done {
 }
 
 ```
-
 
 # OOP ?
 
