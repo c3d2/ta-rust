@@ -62,7 +62,7 @@ div.screen_grab img {
 
 
 .rust .runlink {
-  visibility: hidden;
+  /*visibility: hidden;*/
   float: right;
   margin: 0;
   padding: 2px 4px;
