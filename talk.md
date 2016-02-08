@@ -171,6 +171,9 @@ fn main() {
 
 ## Debug Print
 
+* `std::fmt::Display` für `"{}"`
+* `std::fmt::Debug` für `"{:?}"`
+
 ```rust
 fn main(){
 
