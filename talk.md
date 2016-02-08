@@ -818,8 +818,9 @@ fn print_area<T: HasArea>(shape: T) {
 
 ## Fresh in Hyper
 
-Motivation: HTTP Response Headers können nur geändert werden wenn Body
-noch nicht gesendet wird.
+* **Motivation:** HTTP Response Headers können nur geändert werden wenn Body
+  noch nicht gesendet wird.
+* **Lösung:** Extra-Typparameter: `Fesh`, `Streaming`, `Any`
 
 ```rust-norun
 pub trait Handler: Sync + Send {
