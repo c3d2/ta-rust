@@ -1,6 +1,11 @@
 % Rust
-% astro und hoodie
+% hoodie und astro
 % February 10, 2016
+
+
+# Part 1 - Die Sprache
+
+---
 
 <!-- vim:set nospell: -->
 
@@ -507,6 +512,162 @@ while !done {
 
 ```
 
+# Y U NO parallel?
+
+## Data Races?
+
+* threads greifen auf die selben Daten zu
+* unsynchronisiert
+* mehrere Schreiben
+
+## Shared nothing
+
+```rust
+use std::thread;
+use std::sync::mpsc;
+
+fn main(){
+  let (tx, rx) = mpsc::channel();
+  for task_num in 0..6{
+    let tx = tx.clone(); // spezielles clone()
+    thread::spawn(
+      move || {
+        let msg = format!("Task {:?} done!", task_num);
+        tx.send(msg).unwrap();
+      }
+    );
+  }
+
+  for data in rx.iter(){
+    println!("{:?}", data);
+  }
+}
+```
+
+## Shared *Immutable* State
+
+```rust
+use std::sync::Arc;
+use std::thread;
+use std::sync::mpsc;
+
+struct HugeStruct{
+  name: &'static str,
+}
+
+fn main(){
+  let (tx, rx) = mpsc::channel();
+  let huge_struct = HugeStruct{name:"Bruce"};
+  let arc = Arc::new(huge_struct);
+
+  for task_num in 0..6{
+    let tx = tx.clone();
+    let arc = arc.clone(); // increase counter
+    thread::spawn(
+      move || {
+        let msg = format!("Task {:?}?  Accessed {:?}!", task_num, arc.name);
+        tx.send(msg).unwrap();
+      }
+    );
+  }
+
+  for data in rx.iter(){
+    println!("{:?}", data);
+  }
+}
+```
+
+## Mutation *with* Synchronization
+
+```rust
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::sync::mpsc;
+
+struct HugeStruct{
+  name: &'static str,
+  access_count: u32
+}
+
+fn main(){
+  let (tx, rx) = mpsc::channel();
+  let huge_struct = HugeStruct{name:"Bruce", access_count: 0};
+  let arc = Arc::new(Mutex::new(huge_struct));
+
+  for task_num in 0..6{
+    let tx = tx.clone();
+    let arc = arc.clone(); // increase counter
+    thread::spawn(
+      move || {
+        let mut guard = arc.lock().unwrap();
+        guard.access_count +=1;
+        let msg = format!("Task {:?}?  Accessed {:?} for the {:?}. time!", task_num, guard.name, guard.access_count);
+        tx.send(msg).unwrap();
+      }
+    );
+  }
+
+  for data in rx.iter(){
+    println!("{:?}", data);
+  }
+}
+
+```
+
+## rayon
+
+```rust-norun
+let list = vec![1,2,3,4,5,6,7,8,9];
+let new_list = list
+  .iter()
+  .map(|x| do_something_heavy(x))
+  .collect();
+```
+
+```rust-norun
+let list = vec![1,2,3,4,5,6,7,8,9];
+let new_list = list
+  .par_iter()
+  .map(|x| do_something_heavy(x))
+  .collect();
+```
+
+[rayon](https://github.com/nikomatsakis/rayon/)
+
+## Weitere Libs
+
+* [simple_parallel](https://github.com/huonw/simple_parallel)
+* [viel mehr](http://areweconcurrentyet.com/)
+
+
+## Extra
+
+```rust
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let data = Arc::new(
+        Mutex::new(
+            vec![1, 2, 3]
+            )
+        );
+
+    for i in 0..3 {
+        let data = data.clone();
+        thread::spawn(move || {
+            let mut data = data.lock().unwrap();
+            data[i] += 1;
+        });
+    }
+
+    thread::sleep_ms(50);
+}
+```
+
+
+
+
 # OOP ?
 
 ## struct und enum
@@ -561,104 +722,75 @@ impl Point {
 
 ## Traits
 
--------------------------------------
+```rust-norun
+struct Circle { x: f64, y: f64, radius: f64, }
 
-# here be dragons
-
-## der rest ist unsortiert
-
-* Traits vs Object Orientation -> composition vs inheritance
-* Trait based Generics vs Templates -> no ducktyping in "template" expansions
-* no nullpointers => functions return `Option<T>` or `Result<T>`
-* functional style Error Handling, no exceptions :)
-
-## Concurrency
-
-* mpsc channels
-* ownership is enforced -> no Dataraces
-* shared access through `Arc`
-
-```rust
-use std::sync::{Arc, Mutex};
-use std::thread;
-
-fn main() {
-    let data = Arc::new(
-        Mutex::new(
-            vec![1, 2, 3]
-            )
-        );
-
-    for i in 0..3 {
-        let data = data.clone();
-        thread::spawn(move || {
-            let mut data = data.lock().unwrap();
-            data[i] += 1;
-        });
+impl Circle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
     }
-
-    thread::sleep_ms(50);
 }
 ```
 
-## Macros
+. . .
 
-* very unlike C/C++ Macros
-* work on AST after parser
-* **example**
+``` rust-norun
+struct Circle { x: f64, y: f64, radius: f64, }
+
+trait HasArea {
+    fn area(&self) -> f64;
+}
+
+impl HasArea for Circle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+```
+
+## Trait Bounds
 
 
-# HandsOn: Life Coding Examples
+```rust-norun
+fn print_area<T>(shape: T) {
+    println!("This shape has an area of {}", shape.area());
+}
+```
 
-## Basics
+. . .
 
-#. (im)mutability
-#. primitives and tuple, enum, struct
-#. control flow (if, loop, while)
-#. expressions vs statements
-#. println!()
+```
+error: no method named `area` found for type `T` in the current scope
+```
 
-## Get Rusty
+. . .
 
-#. references (e.g. String vs &str)
-#. Option and Result
-#. pattern matching (match, if let)
-#. error handling, simple
-
-## Stdlib
-
-#. collections
-#. iterators
-
-## Advanced
-
-#. closures
-#. traits, trait bounds
-#. documentation comments, in-line tests `#[test]` and benchmarks `#[bench]`
-#. error handling, closer look
-
-## For Completeness Sake
-
-#. modules
-#. macros ( please don't )
-
-# Extension Slides
-
-##
+```rust-norun
+fn print_area<T: HasArea>(shape: T) {
+    println!("This shape has an area of {}", shape.area());
+}
+```
 
 # eco system
 
+## Links
 
-## Community and Documentation
+### News && Community
 
-* users.rust-lang.org
-* http://rustbyexample.com/
-* http://doc.rust-lang.org/stable/book/
-* http://www.reddit.com/r/rust
-* http://rustyrad.io/
-* http://this-week-in-rust.org/
-* http://cglab.ca/~abeinges/blah/turpl/_book/
+* [this-week-in-rust.org/](http://this-week-in-rust.org/)
+* [/r/rust](http://www.reddit.com/r/rust)
+* [users.rust-lang.org](users.rust-lang.org)
 
+### Resources
+
+* [rustbyexample.com/](http://rustbyexample.com/)
+* [The Rust Programming Language](http://doc.rust-lang.org/stable/book/)
+* [The little book of Rust Macros](https://danielkeep.github.io/tlborm/)
+* [Rustonomicon: Dark Arts of unsafe rust](https://doc.rust-lang.org/nightly/nomicon/)
+
+# Part 2 - konkrete Beispiele
+
+---
 
 # Beispiel für Parameterisierte Typen
 

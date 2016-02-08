@@ -4,7 +4,7 @@
   <meta foo="bar">
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="author" content="astro und hoodie">
+  <meta name="author" content="hoodie und astro">
   <meta name="dcterms.date" content="2016-02-10">
   <title>Rust</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,10 +34,15 @@
 
 <section>
   <h1 class="title">Rust</h1>
-  <h2 class="author">astro und hoodie</h2>
+  <h2 class="author">hoodie und astro</h2>
   <h3 class="date">February 10, 2016</h3>
 </section>
 
+<section><section id="part-1---die-sprache" class="titleslide slide level1"><h1>Part 1 - Die Sprache</h1></section><section class="slide level2">
+
+<!-- vim:set nospell: -->
+
+</section></section>
 <section><section id="was-ist-rust" class="titleslide slide level1"><h1>Was ist Rust?</h1></section><section id="eine-programmiersprache" class="slide level2">
 <h1>eine Programmiersprache!</h1>
 <ul>
@@ -394,7 +399,7 @@ if x == 5 {
     10
 } else {
     15
-}; // y: i32</code></pre>
+}; // y = i32</code></pre>
 </div>
 </section><section id="expressions-vs-statements" class="slide level2">
 <h1>Expressions vs Statements</h1>
@@ -469,6 +474,140 @@ match origin {
 </code></pre>
 </div>
 </section></section>
+<section><section id="y-u-no-parallel" class="titleslide slide level1"><h1>Y U NO parallel?</h1></section><section id="data-races" class="slide level2">
+<h1>Data Races?</h1>
+<ul>
+<li>threads greifen auf die selben Daten zu</li>
+<li>unsynchronisiert</li>
+<li>mehrere Schreiben</li>
+</ul>
+</section><section id="shared-nothing" class="slide level2">
+<h1>Shared nothing</h1>
+<pre class="rust"><code>use std::thread;
+use std::sync::mpsc;
+
+fn main(){
+  let (tx, rx) = mpsc::channel();
+  for task_num in 0..6{
+    let tx = tx.clone(); // spezielles clone()
+    thread::spawn(
+      move || {
+        let msg = format!(&quot;Task {:?} done!&quot;, task_num);
+        tx.send(msg).unwrap();
+      }
+    );
+  }
+
+  for data in rx.iter(){
+    println!(&quot;{:?}&quot;, data);
+  }
+}</code></pre>
+</section><section id="shared-immutable-state" class="slide level2">
+<h1>Shared <em>Immutable</em> State</h1>
+<pre class="rust"><code>use std::sync::Arc;
+use std::thread;
+use std::sync::mpsc;
+
+struct HugeStruct{
+  name: &amp;&#39;static str,
+}
+
+fn main(){
+  let (tx, rx) = mpsc::channel();
+  let huge_struct = HugeStruct{name:&quot;Bruce&quot;};
+  let arc = Arc::new(huge_struct);
+
+  for task_num in 0..6{
+    let tx = tx.clone();
+    let arc = arc.clone(); // increase counter
+    thread::spawn(
+      move || {
+        let msg = format!(&quot;Task {:?}?  Accessed {:?}!&quot;, task_num, arc.name);
+        tx.send(msg).unwrap();
+      }
+    );
+  }
+
+  for data in rx.iter(){
+    println!(&quot;{:?}&quot;, data);
+  }
+}</code></pre>
+</section><section id="mutation-with-synchronization" class="slide level2">
+<h1>Mutation <em>with</em> Synchronization</h1>
+<pre class="rust"><code>use std::sync::{Arc, Mutex};
+use std::thread;
+use std::sync::mpsc;
+
+struct HugeStruct{
+  name: &amp;&#39;static str,
+  access_count: u32
+}
+
+fn main(){
+  let (tx, rx) = mpsc::channel();
+  let huge_struct = HugeStruct{name:&quot;Bruce&quot;, access_count: 0};
+  let arc = Arc::new(Mutex::new(huge_struct));
+
+  for task_num in 0..6{
+    let tx = tx.clone();
+    let arc = arc.clone(); // increase counter
+    thread::spawn(
+      move || {
+        let mut guard = arc.lock().unwrap();
+        guard.access_count +=1;
+        let msg = format!(&quot;Task {:?}?  Accessed {:?} for the {:?}. time!&quot;, task_num, guard.name, guard.access_count);
+        tx.send(msg).unwrap();
+      }
+    );
+  }
+
+  for data in rx.iter(){
+    println!(&quot;{:?}&quot;, data);
+  }
+}
+</code></pre>
+</section><section id="rayon" class="slide level2">
+<h1>rayon</h1>
+<pre class="rust-norun"><code>let list = vec![1,2,3,4,5,6,7,8,9];
+let new_list = list
+  .iter()
+  .map(|x| do_something_heavy(x))
+  .collect();</code></pre>
+<pre class="rust-norun"><code>let list = vec![1,2,3,4,5,6,7,8,9];
+let new_list = list
+  .par_iter()
+  .map(|x| do_something_heavy(x))
+  .collect();</code></pre>
+<p><a href="https://github.com/nikomatsakis/rayon/">rayon</a></p>
+</section><section id="weitere-libs" class="slide level2">
+<h1>Weitere Libs</h1>
+<ul>
+<li><a href="https://github.com/huonw/simple_parallel">simple_parallel</a></li>
+<li><a href="http://areweconcurrentyet.com/">viel mehr</a></li>
+</ul>
+</section><section id="extra" class="slide level2">
+<h1>Extra</h1>
+<pre class="rust"><code>use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let data = Arc::new(
+        Mutex::new(
+            vec![1, 2, 3]
+            )
+        );
+
+    for i in 0..3 {
+        let data = data.clone();
+        thread::spawn(move || {
+            let mut data = data.lock().unwrap();
+            data[i] += 1;
+        });
+    }
+
+    thread::sleep_ms(50);
+}</code></pre>
+</section></section>
 <section><section id="oop" class="titleslide slide level1"><h1>OOP ?</h1></section><section id="struct-und-enum" class="slide level2">
 <h1>struct und enum</h1>
 <pre class="rust-norun"><code>struct Point { x: i32, y: i32 }</code></pre>
@@ -508,104 +647,58 @@ impl Point {
 }</code></pre>
 </section><section id="traits" class="slide level2">
 <h1>Traits</h1>
-</section><section class="slide level2">
+<pre class="rust-norun"><code>struct Circle { x: f64, y: f64, radius: f64, }
 
-</section></section>
-<section><section id="here-be-dragons" class="titleslide slide level1"><h1>here be dragons</h1></section><section id="der-rest-ist-unsortiert" class="slide level2">
-<h1>der rest ist unsortiert</h1>
-<ul>
-<li>Traits vs Object Orientation -&gt; composition vs inheritance</li>
-<li>Trait based Generics vs Templates -&gt; no ducktyping in &quot;template&quot; expansions</li>
-<li>no nullpointers =&gt; functions return <code>Option&lt;T&gt;</code> or <code>Result&lt;T&gt;</code></li>
-<li>functional style Error Handling, no exceptions :)</li>
-</ul>
-</section><section id="concurrency" class="slide level2">
-<h1>Concurrency</h1>
-<ul>
-<li>mpsc channels</li>
-<li>ownership is enforced -&gt; no Dataraces</li>
-<li>shared access through <code>Arc</code></li>
-</ul>
-<pre class="rust"><code>use std::sync::{Arc, Mutex};
-use std::thread;
-
-fn main() {
-    let data = Arc::new(
-        Mutex::new(
-            vec![1, 2, 3]
-            )
-        );
-
-    for i in 0..3 {
-        let data = data.clone();
-        thread::spawn(move || {
-            let mut data = data.lock().unwrap();
-            data[i] += 1;
-        });
+impl Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
     }
-
-    thread::sleep_ms(50);
 }</code></pre>
-</section><section id="macros" class="slide level2">
-<h1>Macros</h1>
+<div class="fragment">
+<pre class="rust-norun"><code>struct Circle { x: f64, y: f64, radius: f64, }
+
+trait HasArea {
+    fn area(&amp;self) -&gt; f64;
+}
+
+impl HasArea for Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}</code></pre>
+</div>
+</section><section id="trait-bounds" class="slide level2">
+<h1>Trait Bounds</h1>
+<pre class="rust-norun"><code>fn print_area&lt;T&gt;(shape: T) {
+    println!(&quot;This shape has an area of {}&quot;, shape.area());
+}</code></pre>
+<div class="fragment">
+<pre><code>error: no method named `area` found for type `T` in the current scope</code></pre>
+</div>
+<div class="fragment">
+<pre class="rust-norun"><code>fn print_area&lt;T: HasArea&gt;(shape: T) {
+    println!(&quot;This shape has an area of {}&quot;, shape.area());
+}</code></pre>
+</div>
+</section></section>
+<section><section id="eco-system" class="titleslide slide level1"><h1>eco system</h1></section><section id="links" class="slide level2">
+<h1>Links</h1>
+<h3 id="news-community">News &amp;&amp; Community</h3>
 <ul>
-<li>very unlike C/C++ Macros</li>
-<li>work on AST after parser</li>
-<li><strong>example</strong></li>
+<li><a href="http://this-week-in-rust.org/">this-week-in-rust.org/</a></li>
+<li><a href="http://www.reddit.com/r/rust">/r/rust</a></li>
+<li><a href="users.rust-lang.org">users.rust-lang.org</a></li>
+</ul>
+<h3 id="resources">Resources</h3>
+<ul>
+<li><a href="http://rustbyexample.com/">rustbyexample.com/</a></li>
+<li><a href="http://doc.rust-lang.org/stable/book/">The Rust Programming Language</a></li>
+<li><a href="https://danielkeep.github.io/tlborm/">The little book of Rust Macros</a></li>
+<li><a href="https://doc.rust-lang.org/nightly/nomicon/">Rustonomicon: Dark Arts of unsafe rust</a></li>
 </ul>
 </section></section>
-<section><section id="handson-life-coding-examples" class="titleslide slide level1"><h1>HandsOn: Life Coding Examples</h1></section><section id="basics" class="slide level2">
-<h1>Basics</h1>
-<ol>
-<li>(im)mutability</li>
-<li>primitives and tuple, enum, struct</li>
-<li>control flow (if, loop, while)</li>
-<li>expressions vs statements</li>
-<li>println!()</li>
-</ol>
-</section><section id="get-rusty" class="slide level2">
-<h1>Get Rusty</h1>
-<ol>
-<li>references (e.g. String vs &amp;str)</li>
-<li>Option and Result</li>
-<li>pattern matching (match, if let)</li>
-<li>error handling, simple</li>
-</ol>
-</section><section id="stdlib" class="slide level2">
-<h1>Stdlib</h1>
-<ol>
-<li>collections</li>
-<li>iterators</li>
-</ol>
-</section><section id="advanced" class="slide level2">
-<h1>Advanced</h1>
-<ol>
-<li>closures</li>
-<li>traits, trait bounds</li>
-<li>documentation comments, in-line tests <code>#[test]</code> and benchmarks <code>#[bench]</code></li>
-<li>error handling, closer look</li>
-</ol>
-</section><section id="for-completeness-sake" class="slide level2">
-<h1>For Completeness Sake</h1>
-<ol>
-<li>modules</li>
-<li>macros ( please don't )</li>
-</ol>
-</section></section>
-<section><section id="extension-slides" class="titleslide slide level1"><h1>Extension Slides</h1></section><section id="section" class="slide level2">
-<h1></h1>
-</section></section>
-<section><section id="eco-system" class="titleslide slide level1"><h1>eco system</h1></section><section id="community-and-documentation" class="slide level2">
-<h1>Community and Documentation</h1>
-<ul>
-<li>users.rust-lang.org</li>
-<li>http://rustbyexample.com/</li>
-<li>http://doc.rust-lang.org/stable/book/</li>
-<li>http://www.reddit.com/r/rust</li>
-<li>http://rustyrad.io/</li>
-<li>http://this-week-in-rust.org/</li>
-<li>http://cglab.ca/~abeinges/blah/turpl/_book/</li>
-</ul>
+<section><section id="part-2---konkrete-beispiele" class="titleslide slide level1"><h1>Part 2 - konkrete Beispiele</h1></section><section class="slide level2">
+
 </section></section>
 <section><section id="beispiel-für-parameterisierte-typen" class="titleslide slide level1"><h1>Beispiel für Parameterisierte Typen</h1></section><section id="fresh-in-hyper" class="slide level2">
 <h1>Fresh in Hyper</h1>
