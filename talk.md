@@ -614,6 +614,15 @@ fn main(){
 
 ```
 
+## Scoped threads
+
+* Stack-Variablen aus der Umgebung des thread-Closures müssen **moved**
+  werden
+* Sonst: Threads können Lifetime des spawnenden Stackframes überleben
+* **Lösung:**
+  * `thread_scoped::scoped(...) -> JoinGuard`
+  * impl Drop for JoinGuard: wartet im Spawner auf Beendigung des Threads
+
 ## rayon
 
 ```rust-norun
