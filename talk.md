@@ -733,10 +733,11 @@ impl Point {
 ## Drop
 
 ```rust-norun
-struct Point { x: i32, y: i32 }
+struct Point { x: i32, y: i32, internal: *mut () }
 
 impl Point {
     fn Drop(self) {
+        free_void_pointer(self.internal);
     }
 }
 ```
