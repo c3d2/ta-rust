@@ -491,6 +491,18 @@ match 'f' {
 }
 ```
 
+## if let
+
+```rust-norun
+// result: enum Option<T, E> { Ok(T), Err(E) }
+if let Err(error) = result {
+  println!("Fehler: {:?}", error);
+  return;
+}
+// result: Ok(T), keinesfalls Err(E) 
+let result = result.unwrap();
+```
+
 ## loops
 
 ```rust-norun
