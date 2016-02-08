@@ -255,6 +255,21 @@ fn main(){
 }
 ```
 
+## Closures
+```rust-norun
+let f1 = move || println!("from my env: {:?}", env_stuff);
+let f2 = move |a, b, c| { /* ... */ };
+```
+
+> Without move, a closure may be tied to the stack frame that created it, while a move closure is self-contained. This means that you cannot generally return a non-move closure from a function, for example.
+
+## Closure types
+
+* `FnOnce`: The closure can be called once. A closure called as FnOnce can move out values from its environment.
+* `FnMut`: The closure can be called multiple times as mutable. A closure called as FnMut can mutate values from its environment. FnMut inherits from FnOnce (i.e. anything implementing FnMut also implements FnOnce).
+* `Fn`: The closure can be called multiple times through a shared reference. A closure called as Fn can neither move out from nor mutate values from its environment. Fn inherits from FnMut, which itself inherits from FnOnce.
+
+
 # Sicher, schnell, wie?
 
 ## Memory Model
