@@ -1,6 +1,6 @@
 % Rust
 % hoodie und astro
-% February 10, 2016
+% 10. Februar 2016
 
 
 # Part 1 - Die Sprache
