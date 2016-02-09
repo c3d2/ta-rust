@@ -202,6 +202,10 @@
 }</code></pre>
 </section><section id="debug-print" class="slide level2">
 <h1>Debug Print</h1>
+<ul>
+<li><code>std::fmt::Display</code> für <code>&quot;{}&quot;</code></li>
+<li><code>std::fmt::Debug</code> für <code>&quot;{:?}&quot;</code></li>
+</ul>
 <pre class="rust"><code>fn main(){
 
     #[derive(Debug)]
@@ -265,6 +269,20 @@ fn main(){
 <pre class="rust-norun"><code>fn main(){
   let sushi = Box::new((&quot;rice&quot;, &quot;fish&quot;));
 }</code></pre>
+</section><section id="closures" class="slide level2">
+<h1>Closures</h1>
+<pre class="rust-norun"><code>let f1 = move || println!(&quot;from my env: {:?}&quot;, env_stuff);
+let f2 = move |a, b, c| { /* ... */ };</code></pre>
+<blockquote>
+<p>Without move, a closure may be tied to the stack frame that created it, while a move closure is self-contained. This means that you cannot generally return a non-move closure from a function, for example.</p>
+</blockquote>
+</section><section id="closure-types" class="slide level2">
+<h1>Closure types</h1>
+<ul>
+<li><code>FnOnce</code>: The closure can be called once. A closure called as FnOnce can move out values from its environment.</li>
+<li><code>FnMut</code>: The closure can be called multiple times as mutable. A closure called as FnMut can mutate values from its environment. FnMut inherits from FnOnce (i.e. anything implementing FnMut also implements FnOnce).</li>
+<li><code>Fn</code>: The closure can be called multiple times through a shared reference. A closure called as Fn can neither move out from nor mutate values from its environment. Fn inherits from FnMut, which itself inherits from FnOnce.</li>
+</ul>
 </section></section>
 <section><section id="sicher-schnell-wie" class="titleslide slide level1"><h1>Sicher, schnell, wie?</h1></section><section id="memory-model" class="slide level2">
 <h1>Memory Model</h1>
@@ -457,6 +475,15 @@ match origin {
     &#39;k&#39; ... &#39;z&#39; =&gt; println!(&quot;late letter&quot;),
     _ =&gt; println!(&quot;something else&quot;),
 }</code></pre>
+</section><section id="if-let" class="slide level2">
+<h1>if let</h1>
+<pre class="rust-norun"><code>// result: enum Option&lt;T, E&gt; { Ok(T), Err(E) }
+if let Err(error) = result {
+  println!(&quot;Fehler: {:?}&quot;, error);
+  return;
+}
+// result: Ok(T), keinesfalls Err(E) 
+let result = result.unwrap();</code></pre>
 </section><section id="loops" class="slide level2">
 <h1>loops</h1>
 <pre class="rust-norun"><code>loop {
@@ -565,6 +592,15 @@ fn main(){
   }
 }
 </code></pre>
+</section><section id="scoped-threads" class="slide level2">
+<h1>Scoped threads</h1>
+<ul>
+<li>Stack-Variablen aus der Umgebung des thread-Closures müssen <strong>moved</strong> werden</li>
+<li>Sonst: Threads können Lifetime des spawnenden Stackframes überleben</li>
+<li><strong>Lösung:</strong></li>
+<li><code>thread_scoped::scoped(...) -&gt; JoinGuard</code></li>
+<li>impl Drop for JoinGuard: wartet im Spawner auf Beendigung des Threads</li>
+</ul>
 </section><section id="rayon" class="slide level2">
 <h1>rayon</h1>
 <pre class="rust-norun"><code>let list = vec![1,2,3,4,5,6,7,8,9];
@@ -638,14 +674,24 @@ impl Point {
 </div>
 </section><section id="drop" class="slide level2">
 <h1>Drop</h1>
-<pre class="rust-norun"><code>struct Point { x: i32, y: i32 }
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32}
 
 impl Point {
     fn Drop(self) {
     }
 }</code></pre>
+</section><section id="drop-more" class="slide level2">
+<h1>Drop (more)</h1>
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32, internal: *mut () }
+
+impl Point {
+    fn Drop(self) {
+        free_void_pointer(self.internal);
+    }
+}</code></pre>
 </section><section id="traits" class="slide level2">
 <h1>Traits</h1>
+<p>Vergleiche: Java Interfaces, Haskell Typeclasses</p>
 <pre class="rust-norun"><code>struct Circle { x: f64, y: f64, radius: f64, }
 
 impl Circle {
@@ -696,12 +742,23 @@ impl HasArea for Circle {
 <li><a href="https://doc.rust-lang.org/nightly/nomicon/">Rustonomicon: Dark Arts of unsafe rust</a></li>
 </ul>
 </section></section>
+<section><section id="stop-hacking-time" class="titleslide slide level1"><h1>Stop! hacking time</h1></section><section id="checklist" class="slide level2">
+<h1>Checklist:</h1>
+<ul>
+<li>☑ install rustc<br /></li>
+<li>☑ learn cargo<br /></li>
+<li>☑ scan crates.io<br /></li>
+</ul>
+</section></section>
 <section><section id="part-2---konkrete-beispiele" class="titleslide slide level1"><h1>Part 2 - konkrete Beispiele</h1></section><section class="slide level2">
 
 </section></section>
 <section><section id="beispiel-für-parameterisierte-typen" class="titleslide slide level1"><h1>Beispiel für Parameterisierte Typen</h1></section><section id="fresh-in-hyper" class="slide level2">
 <h1>Fresh in Hyper</h1>
-<p>Motivation: HTTP Response Headers können nur geändert werden wenn Body noch nicht gesendet wird.</p>
+<ul>
+<li><strong>Motivation:</strong> HTTP Response Headers können nur geändert werden wenn Body noch nicht gesendet wird.</li>
+<li><strong>Lösung:</strong> Extra-Typparameter: <code>Fesh</code>, <code>Streaming</code>, <code>Any</code></li>
+</ul>
 <pre class="rust-norun"><code>pub trait Handler: Sync + Send {
     fn handle&lt;&#39;a, &#39;k&gt;(&amp;&#39;a self, Request&lt;&#39;a, &#39;k&gt;, Response&lt;&#39;a, Fresh&gt;);
     // ...

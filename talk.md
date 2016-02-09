@@ -751,6 +751,17 @@ impl Point {
 ## Drop
 
 ```rust-norun
+struct Point { x: i32, y: i32}
+
+impl Point {
+    fn Drop(self) {
+    }
+}
+```
+
+## Drop (more)
+
+```rust-norun
 struct Point { x: i32, y: i32, internal: *mut () }
 
 impl Point {
@@ -829,6 +840,15 @@ fn print_area<T: HasArea>(shape: T) {
 * [The Rust Programming Language](http://doc.rust-lang.org/stable/book/)
 * [The little book of Rust Macros](https://danielkeep.github.io/tlborm/)
 * [Rustonomicon: Dark Arts of unsafe rust](https://doc.rust-lang.org/nightly/nomicon/)
+
+# Stop! hacking time
+
+## Checklist:
+
+* ☑ install rustc\
+* ☑ learn cargo\
+* ☑ scan crates.io\
+
 
 # Part 2 - konkrete Beispiele
 
