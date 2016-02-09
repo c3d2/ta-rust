@@ -89,19 +89,21 @@ siehe: [influences](http://doc.rust-lang.org/reference.html#appendix-influences)
 
 # Features
 
+## Achtung, Werbung
+
+---
+
 ## Sicherheit
 
-* Speichersicherheit
-* Cuncurrency ohne Speicherverletzungen
-
+* Cuncurrency ohne Racesconditions
 * *move semantics*
 * Type inference
 * Typsicherheit zur Compilezeit
-  * keine implizites casting
+  * kein implizites Casting
 
 ## Leistung
 
-* [zero-cost abstractions](http://blog.rust-lang.org/2015/05/11/traits.html)
+* zero-cost abstractions durch [traits](http://blog.rust-lang.org/2015/05/11/traits.html)
 * minimale Runtime
 * effiziente C Bindings
 
@@ -117,11 +119,14 @@ siehe: [influences](http://doc.rust-lang.org/reference.html#appendix-influences)
 ## Ökosystem
 
 * Dokumentation ist TopPriority
+    * cargo doc beats doxygen
+    * special comments
+    * inline examples with testing
+    * community doc is awesome
+
 * in-line Tests und Benchmarks
     * `#[test]`
     * `#[bench]`
-
-* cargo kompiliert, dokumentiert, testet, benchmarkt und publisht
 
 ## Cargo
 
@@ -129,12 +134,41 @@ siehe: [influences](http://doc.rust-lang.org/reference.html#appendix-influences)
 * crates.io as repo, extern git repositories, explizite
 * Gleich benutzen
 * Macht den Umgang mit external crates möglich
+* cargo `build`, `run`, `doc`, `test`, `bench`, `publish`
+
+. . .
+
+```
+$ git clone https://github.com/astro/rust-kenburns/
+$ cd rust-kenburns
+$ cargo run
+```
+
+. . .
+
+```
+$ git clone https://github.com/hoodie/rust-chess
+$ cd rust-chess
+$ cargo run --example random_player
+```
 
 ## Wohin mit dem Code?
 
-* Libraries: `src/**/lib.rs`
-* Binaries: `src/main.rs src/bin/*.rs`
+* Libraries: `src/lib.rs`
+* Binaries: `src/main.rs`
 
+. . .
+
+### oder
+
+* Libraries: `src/**/lib.rs`
+* Binaries: `src/bin/*.rs`
+
+## Wie teste ich meine lib?
+
+. . .
+
+### LIFE
 
 # Beispiele
 
@@ -255,19 +289,103 @@ fn main(){
 }
 ```
 
-## Closures
+
+# Do you have OOP?
+
+## pepsi ok?
+
+. . .
+
+### structs
+
+
 ```rust-norun
-let f1 = move || println!("from my env: {:?}", env_stuff);
-let f2 = move |a, b, c| { /* ... */ };
+struct Love;                    // unit struct
+struct Point ( i32, i32 );      // tuple struct
+struct Point { x: i32, y: i32 } // as you know from C
 ```
 
-> Without move, a closure may be tied to the stack frame that created it, while a move closure is self-contained. This means that you cannot generally return a non-move closure from a function, for example.
+### enums
 
-## Closure types
+```rust-norun
+enum Message {
+    Quit,
+    ChangeColor(i32, i32, i32),
+    Move { x: i32, y: i32 },
+    Write(String),
+}
+```
 
-* `FnOnce`: The closure can be called once. A closure called as FnOnce can move out values from its environment.
-* `FnMut`: The closure can be called multiple times as mutable. A closure called as FnMut can mutate values from its environment. FnMut inherits from FnOnce (i.e. anything implementing FnMut also implements FnOnce).
-* `Fn`: The closure can be called multiple times through a shared reference. A closure called as Fn can neither move out from nor mutate values from its environment. Fn inherits from FnMut, which itself inherits from FnOnce.
+[more](http://doc.rust-lang.org/stable/book/structs.html)
+[more](http://doc.rust-lang.org/stable/book/structs.html)
+
+
+## Impl
+
+```rust-norun
+struct Point { x: i32, y: i32 }
+
+impl Point {
+    fn distance_from_origin(&self) -> i32 {
+        let Point { x, y } = *self;
+        let sum = (x*x + y*y) as f64;
+        sum.sqrt() as i32
+    }
+}
+```
+
+. . .
+
+geht auch für enum!
+
+## Constructor?
+
+. . .
+
+```rust
+struct Point { x: i32, y: i32, z:i32}
+
+impl Point {
+    fn new() -> Point {
+      Point { x: 0, y: 0, z:0}
+    }
+
+    fn on_plane(x:i32, y:i32) -> Self {
+      Point { x: x, y: y, ..Point::new()) }
+    }
+}
+```
+
+[copy constructor](http://doc.rust-lang.org/stable/std/convert/)
+
+## self? so wie in python?
+
+ * `self` : Kurz für `self:Self`, konsumiert
+ * `&self` : Read-only
+ * `&mut self` : Read-Write
+
+## Drop
+
+```rust-norun
+struct Point { x: i32, y: i32}
+
+impl Point {
+    fn Drop(self) {
+    }
+}
+```
+
+## Drop (more)
+
+```rust-norun
+struct Point { x: i32, y: i32, internal: *mut () }
+
+impl Point {
+    fn Drop(self) {
+        free_void_pointer(self.internal);
+    }
+}
+```
 
 
 # Sicher, schnell, wie?
@@ -430,6 +548,46 @@ let y = if x == 5 {
 }; // y = i32
 ```
 
+
+## loops
+
+```rust-norun
+loop {
+    println!("Loop forever!");
+}
+```
+
+. . .
+
+```rust-norun
+while !done {
+    x += x - 3;
+
+    println!("{}", x);
+
+    if x % 5 == 0 { done = true; }
+}
+```
+
+## for loops
+
+```rust-norun
+for x in 0..10 {
+    println!("{}", x); // x: i32
+}
+```
+
+```rust
+fn main(){
+  let list = vec!["dog", "cat", "mouse", "cheese", "Lactobacillales"];
+
+  for i in list {
+      print!("{} -> ", i);
+  }
+}
+```
+
+
 ## Expressions vs Statements
 
 ```rust-norun
@@ -517,29 +675,8 @@ if let Err(error) = result {
   println!("Fehler: {:?}", error);
   return;
 }
-// result: Ok(T), keinesfalls Err(E) 
+// result: Ok(T), keinesfalls Err(E)
 let result = result.unwrap();
-```
-
-## loops
-
-```rust-norun
-loop {
-    println!("Loop forever!");
-}
-```
-
-. . .
-
-```rust-norun
-while !done {
-    x += x - 3;
-
-    println!("{}", x);
-
-    if x % 5 == 0 { done = true; }
-}
-
 ```
 
 # Y U NO parallel?
@@ -549,6 +686,21 @@ while !done {
 * threads greifen auf die selben Daten zu
 * unsynchronisiert
 * mehrere Schreiben
+
+## Closures
+```rust-norun
+let f1 = move || println!("from my env: {:?}", env_stuff);
+let f2 = move |a, b, c| { /* ... */ };
+```
+
+> Without move, a closure may be tied to the stack frame that created it, while a move closure is self-contained. This means that you cannot generally return a non-move closure from a function, for example.
+
+## Closure types
+
+* `FnOnce`: The closure can be called once. A closure called as FnOnce can move out values from its environment.
+* `FnMut`: The closure can be called multiple times as mutable. A closure called as FnMut can mutate values from its environment. FnMut inherits from FnOnce (i.e. anything implementing FnMut also implements FnOnce).
+* `Fn`: The closure can be called multiple times through a shared reference. A closure called as Fn can neither move out from nor mutate values from its environment. Fn inherits from FnMut, which itself inherits from FnOnce.
+
 
 ## Shared nothing
 
@@ -707,69 +859,7 @@ fn main() {
 
 
 
-# OOP ?
-
-## struct und enum
-
-
-```rust-norun
-struct Point { x: i32, y: i32 }
-```
-
-. . .
-
-```rust-norun
-enum Message {
-    Quit,
-    ChangeColor(i32, i32, i32),
-    Move { x: i32, y: i32 },
-    Write(String),
-}
-```
-
-
-## Impl
-
-```rust-norun
-struct Point { x: i32, y: i32 }
-
-impl Point {
-    fn distance_from_origin(&self) -> i32 {
-        let Point { x, y } = *self;
-        let sum = (x*x + y*y) as f64;
-        sum.sqrt() as i32
-    }
-}
-```
-
-. . .
-
- * `self` : Kurz für `self:Self`, konsumiert
- * `&self` : Read-only
- * `&mut self` : Read-Write
-
-## Drop
-
-```rust-norun
-struct Point { x: i32, y: i32}
-
-impl Point {
-    fn Drop(self) {
-    }
-}
-```
-
-## Drop (more)
-
-```rust-norun
-struct Point { x: i32, y: i32, internal: *mut () }
-
-impl Point {
-    fn Drop(self) {
-        free_void_pointer(self.internal);
-    }
-}
-```
+# Traits
 
 ## Traits
 

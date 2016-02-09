@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
   <link rel="stylesheet" href="reveal.js/css/reveal.css">
-  <link rel="stylesheet" href="reveal.js/css/theme/beige.css" id="theme">
+  <link rel="stylesheet" href="reveal.js/css/theme/league.css" id="theme">
   <style type="text/css"></style>
   <!-- Printing and PDF exports -->
   <script>
@@ -123,20 +123,21 @@
 </ul>
 <p>siehe: <a href="http://doc.rust-lang.org/reference.html#appendix-influences">influences</a></p>
 </section></section>
-<section><section id="features" class="titleslide slide level1"><h1>Features</h1></section><section id="sicherheit" class="slide level2">
+<section><section id="features" class="titleslide slide level1"><h1>Features</h1></section><section id="achtung-werbung" class="slide level2">
+<h1>Achtung, Werbung</h1>
+</section><section id="sicherheit" class="slide level2">
 <h1>Sicherheit</h1>
 <ul>
-<li>Speichersicherheit</li>
-<li><p>Cuncurrency ohne Speicherverletzungen</p></li>
+<li>Cuncurrency ohne Racesconditions</li>
 <li><em>move semantics</em></li>
 <li>Type inference</li>
 <li>Typsicherheit zur Compilezeit</li>
-<li><p>keine implizites casting</p></li>
+<li>kein implizites Casting</li>
 </ul>
 </section><section id="leistung" class="slide level2">
 <h1>Leistung</h1>
 <ul>
-<li><a href="http://blog.rust-lang.org/2015/05/11/traits.html">zero-cost abstractions</a></li>
+<li>zero-cost abstractions durch <a href="http://blog.rust-lang.org/2015/05/11/traits.html">traits</a></li>
 <li>minimale Runtime</li>
 <li>effiziente C Bindings</li>
 </ul>
@@ -153,13 +154,18 @@
 </section><section id="ökosystem" class="slide level2">
 <h1>Ökosystem</h1>
 <ul>
-<li>Dokumentation ist TopPriority</li>
+<li>Dokumentation ist TopPriority
+<ul>
+<li>cargo doc beats doxygen</li>
+<li>special comments</li>
+<li>inline examples with testing</li>
+<li>community doc is awesome</li>
+</ul></li>
 <li>in-line Tests und Benchmarks
 <ul>
 <li><code>#[test]</code></li>
 <li><code>#[bench]</code></li>
 </ul></li>
-<li>cargo kompiliert, dokumentiert, testet, benchmarkt und publisht</li>
 </ul>
 </section><section id="cargo" class="slide level2">
 <h1>Cargo</h1>
@@ -168,13 +174,36 @@
 <li>crates.io as repo, extern git repositories, explizite</li>
 <li>Gleich benutzen</li>
 <li>Macht den Umgang mit external crates möglich</li>
+<li>cargo <code>build</code>, <code>run</code>, <code>doc</code>, <code>test</code>, <code>bench</code>, <code>publish</code></li>
 </ul>
+<div class="fragment">
+<pre><code>$ git clone https://github.com/astro/rust-kenburns/
+$ cd rust-kenburns
+$ cargo run</code></pre>
+</div>
+<div class="fragment">
+<pre><code>$ git clone https://github.com/hoodie/rust-chess
+$ cd rust-chess
+$ cargo run --example random_player</code></pre>
+</div>
 </section><section id="wohin-mit-dem-code" class="slide level2">
 <h1>Wohin mit dem Code?</h1>
 <ul>
-<li>Libraries: <code>src/**/lib.rs</code></li>
-<li>Binaries: <code>src/main.rs src/bin/*.rs</code></li>
+<li>Libraries: <code>src/lib.rs</code></li>
+<li>Binaries: <code>src/main.rs</code></li>
 </ul>
+<div class="fragment">
+<h3 id="oder">oder</h3>
+<ul>
+<li>Libraries: <code>src/**/lib.rs</code></li>
+<li>Binaries: <code>src/bin/*.rs</code></li>
+</ul>
+</div>
+</section><section id="wie-teste-ich-meine-lib" class="slide level2">
+<h1>Wie teste ich meine lib?</h1>
+<div class="fragment">
+<h3 id="life">LIFE</h3>
+</div>
 </section></section>
 <section><section id="beispiele-1" class="titleslide slide level1"><h1>Beispiele</h1></section><section id="hello-world" class="slide level2">
 <h1>Hello world</h1>
@@ -269,20 +298,77 @@ fn main(){
 <pre class="rust-norun"><code>fn main(){
   let sushi = Box::new((&quot;rice&quot;, &quot;fish&quot;));
 }</code></pre>
-</section><section id="closures" class="slide level2">
-<h1>Closures</h1>
-<pre class="rust-norun"><code>let f1 = move || println!(&quot;from my env: {:?}&quot;, env_stuff);
-let f2 = move |a, b, c| { /* ... */ };</code></pre>
-<blockquote>
-<p>Without move, a closure may be tied to the stack frame that created it, while a move closure is self-contained. This means that you cannot generally return a non-move closure from a function, for example.</p>
-</blockquote>
-</section><section id="closure-types" class="slide level2">
-<h1>Closure types</h1>
+</section></section>
+<section><section id="do-you-have-oop" class="titleslide slide level1"><h1>Do you have OOP?</h1></section><section id="pepsi-ok" class="slide level2">
+<h1>pepsi ok?</h1>
+<div class="fragment">
+<h3 id="structs">structs</h3>
+<pre class="rust-norun"><code>struct Love;                    // unit struct
+struct Point ( i32, i32 );      // tuple struct
+struct Point { x: i32, y: i32 } // as you know from C</code></pre>
+<h3 id="enums">enums</h3>
+<pre class="rust-norun"><code>enum Message {
+    Quit,
+    ChangeColor(i32, i32, i32),
+    Move { x: i32, y: i32 },
+    Write(String),
+}</code></pre>
+<p><a href="http://doc.rust-lang.org/stable/book/structs.html">more</a> <a href="http://doc.rust-lang.org/stable/book/structs.html">more</a></p>
+</div>
+</section><section id="impl" class="slide level2">
+<h1>Impl</h1>
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32 }
+
+impl Point {
+    fn distance_from_origin(&amp;self) -&gt; i32 {
+        let Point { x, y } = *self;
+        let sum = (x*x + y*y) as f64;
+        sum.sqrt() as i32
+    }
+}</code></pre>
+<div class="fragment">
+<p>geht auch für enum!</p>
+</div>
+</section><section id="constructor" class="slide level2">
+<h1>Constructor?</h1>
+<div class="fragment">
+<pre class="rust"><code>struct Point { x: i32, y: i32, z:i32}
+
+impl Point {
+    fn new() -&gt; Point {
+      Point { x: 0, y: 0, z:0}
+    }
+
+    fn on_plane(x:i32, y:i32) -&gt; Self {
+      Point { x: x, y: y, ..Point::new()) }
+    }
+}</code></pre>
+<p><a href="http://doc.rust-lang.org/stable/std/convert/">copy constructor</a></p>
+</div>
+</section><section id="self-so-wie-in-python" class="slide level2">
+<h1>self? so wie in python?</h1>
 <ul>
-<li><code>FnOnce</code>: The closure can be called once. A closure called as FnOnce can move out values from its environment.</li>
-<li><code>FnMut</code>: The closure can be called multiple times as mutable. A closure called as FnMut can mutate values from its environment. FnMut inherits from FnOnce (i.e. anything implementing FnMut also implements FnOnce).</li>
-<li><code>Fn</code>: The closure can be called multiple times through a shared reference. A closure called as Fn can neither move out from nor mutate values from its environment. Fn inherits from FnMut, which itself inherits from FnOnce.</li>
+<li><code>self</code> : Kurz für <code>self:Self</code>, konsumiert</li>
+<li><code>&amp;self</code> : Read-only</li>
+<li><code>&amp;mut self</code> : Read-Write</li>
 </ul>
+</section><section id="drop" class="slide level2">
+<h1>Drop</h1>
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32}
+
+impl Point {
+    fn Drop(self) {
+    }
+}</code></pre>
+</section><section id="drop-more" class="slide level2">
+<h1>Drop (more)</h1>
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32, internal: *mut () }
+
+impl Point {
+    fn Drop(self) {
+        free_void_pointer(self.internal);
+    }
+}</code></pre>
 </section></section>
 <section><section id="sicher-schnell-wie" class="titleslide slide level1"><h1>Sicher, schnell, wie?</h1></section><section id="memory-model" class="slide level2">
 <h1>Memory Model</h1>
@@ -418,6 +504,32 @@ if x == 5 {
     15
 }; // y = i32</code></pre>
 </div>
+</section><section id="loops" class="slide level2">
+<h1>loops</h1>
+<pre class="rust-norun"><code>loop {
+    println!(&quot;Loop forever!&quot;);
+}</code></pre>
+<div class="fragment">
+<pre class="rust-norun"><code>while !done {
+    x += x - 3;
+
+    println!(&quot;{}&quot;, x);
+
+    if x % 5 == 0 { done = true; }
+}</code></pre>
+</div>
+</section><section id="for-loops" class="slide level2">
+<h1>for loops</h1>
+<pre class="rust-norun"><code>for x in 0..10 {
+    println!(&quot;{}&quot;, x); // x: i32
+}</code></pre>
+<pre class="rust"><code>fn main(){
+  let list = vec![&quot;dog&quot;, &quot;cat&quot;, &quot;mouse&quot;, &quot;cheese&quot;, &quot;Lactobacillales&quot;];
+
+  for i in list {
+      print!(&quot;{} chases &quot;, i);
+  }
+}</code></pre>
 </section><section id="expressions-vs-statements" class="slide level2">
 <h1>Expressions vs Statements</h1>
 <pre class="rust-norun"><code>fn add(a:i32, b:i32) -&gt; i32 {
@@ -482,23 +594,8 @@ if let Err(error) = result {
   println!(&quot;Fehler: {:?}&quot;, error);
   return;
 }
-// result: Ok(T), keinesfalls Err(E) 
+// result: Ok(T), keinesfalls Err(E)
 let result = result.unwrap();</code></pre>
-</section><section id="loops" class="slide level2">
-<h1>loops</h1>
-<pre class="rust-norun"><code>loop {
-    println!(&quot;Loop forever!&quot;);
-}</code></pre>
-<div class="fragment">
-<pre class="rust-norun"><code>while !done {
-    x += x - 3;
-
-    println!(&quot;{}&quot;, x);
-
-    if x % 5 == 0 { done = true; }
-}
-</code></pre>
-</div>
 </section></section>
 <section><section id="y-u-no-parallel" class="titleslide slide level1"><h1>Y U NO parallel?</h1></section><section id="data-races" class="slide level2">
 <h1>Data Races?</h1>
@@ -506,6 +603,20 @@ let result = result.unwrap();</code></pre>
 <li>threads greifen auf die selben Daten zu</li>
 <li>unsynchronisiert</li>
 <li>mehrere Schreiben</li>
+</ul>
+</section><section id="closures" class="slide level2">
+<h1>Closures</h1>
+<pre class="rust-norun"><code>let f1 = move || println!(&quot;from my env: {:?}&quot;, env_stuff);
+let f2 = move |a, b, c| { /* ... */ };</code></pre>
+<blockquote>
+<p>Without move, a closure may be tied to the stack frame that created it, while a move closure is self-contained. This means that you cannot generally return a non-move closure from a function, for example.</p>
+</blockquote>
+</section><section id="closure-types" class="slide level2">
+<h1>Closure types</h1>
+<ul>
+<li><code>FnOnce</code>: The closure can be called once. A closure called as FnOnce can move out values from its environment.</li>
+<li><code>FnMut</code>: The closure can be called multiple times as mutable. A closure called as FnMut can mutate values from its environment. FnMut inherits from FnOnce (i.e. anything implementing FnMut also implements FnOnce).</li>
+<li><code>Fn</code>: The closure can be called multiple times through a shared reference. A closure called as Fn can neither move out from nor mutate values from its environment. Fn inherits from FnMut, which itself inherits from FnOnce.</li>
 </ul>
 </section><section id="shared-nothing" class="slide level2">
 <h1>Shared nothing</h1>
@@ -643,53 +754,7 @@ fn main() {
     thread::sleep_ms(50);
 }</code></pre>
 </section></section>
-<section><section id="oop" class="titleslide slide level1"><h1>OOP ?</h1></section><section id="struct-und-enum" class="slide level2">
-<h1>struct und enum</h1>
-<pre class="rust-norun"><code>struct Point { x: i32, y: i32 }</code></pre>
-<div class="fragment">
-<pre class="rust-norun"><code>enum Message {
-    Quit,
-    ChangeColor(i32, i32, i32),
-    Move { x: i32, y: i32 },
-    Write(String),
-}</code></pre>
-</div>
-</section><section id="impl" class="slide level2">
-<h1>Impl</h1>
-<pre class="rust-norun"><code>struct Point { x: i32, y: i32 }
-
-impl Point {
-    fn distance_from_origin(&amp;self) -&gt; i32 {
-        let Point { x, y } = *self;
-        let sum = (x*x + y*y) as f64;
-        sum.sqrt() as i32
-    }
-}</code></pre>
-<div class="fragment">
-<ul>
-<li><code>self</code> : Kurz für <code>self:Self</code>, konsumiert</li>
-<li><code>&amp;self</code> : Read-only</li>
-<li><code>&amp;mut self</code> : Read-Write</li>
-</ul>
-</div>
-</section><section id="drop" class="slide level2">
-<h1>Drop</h1>
-<pre class="rust-norun"><code>struct Point { x: i32, y: i32}
-
-impl Point {
-    fn Drop(self) {
-    }
-}</code></pre>
-</section><section id="drop-more" class="slide level2">
-<h1>Drop (more)</h1>
-<pre class="rust-norun"><code>struct Point { x: i32, y: i32, internal: *mut () }
-
-impl Point {
-    fn Drop(self) {
-        free_void_pointer(self.internal);
-    }
-}</code></pre>
-</section><section id="traits" class="slide level2">
+<section><section id="traits" class="titleslide slide level1"><h1>Traits</h1></section><section id="traits-1" class="slide level2">
 <h1>Traits</h1>
 <p>Vergleiche: Java Interfaces, Haskell Typeclasses</p>
 <pre class="rust-norun"><code>struct Circle { x: f64, y: f64, radius: f64, }
