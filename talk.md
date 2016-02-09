@@ -43,30 +43,29 @@ und doch ganz anders
 * statisch kompiliert *LLVM*
 * schnell
 * kein garbage-collector
-* Generics
+* Generics, besser
 * zero cost abstractions
 * **low level**
 
 ## wie haskell
 
-* streng getypt
-* Hindley-Milner type system
+* Typesystem
 * Immutable Variablen
 * Pattern Matching
-* lambda-Ausdrücke/Closures
 
 ## wie ruby oder python
 
 * expressive Syntax
 * gut zu lesen
 * Build system und Packetmanager (cargo & crates.io)
+* `Self`stVerständnis
+* lambda-Ausdrücke/Closures
 
 ## wie rust eben!
 
 * **borrow checker**
 * lifetimes Syntax
-* sehr explizit
-
+* sehr explizit: no overloading, no default parameters, no exceptions
 
 
 ## Einflüße
@@ -276,19 +275,58 @@ fn main(){
 fn main(){
   let one = 1u32;
   let fourtytwo= 0b101010;
-  let goku = 9_001;
+  let goku = 9_001u64;
   let ladies = ("x","y");
 }
 ```
+
+## Strings
+
+```rust-norun
+let string_slice:&str   = "hello world";
+let owned_string:String = string_slice.to_string();
+
+fn say_some(message:&str){
+  println!("{:?}", message);
+}
+
+say_some(&owned_string);
+```
+
+. . .
+
+```rust-norun
+let owned_string:String = string_slice.to_owned();
+let owned_string:String = string_slice.into();
+let owned_string:String = String::from(string_slice);
+```
+
+## lifetimes
+
+```rust-norun
+// implicit
+fn foo(x: &i32) {
+}
+
+// explicit
+fn bar<'a>(x: &'a i32) {
+}
+```
+
+[RTFM](http://doc.rust-lang.org/stable/book/lifetimes.html)
 
 ## Pointers
 
 ```rust-norun
 fn main(){
-  let sushi = Box::new(("rice", "fish"));
+  let sushi = Box::new(("rice", "fish")); // like unique pointer
 }
 ```
 
+## Stop already!!!
+
+Es gibt ein tolles [Buch](http://doc.rust-lang.org/stable/book/), sogar auf [deutsch](https://github.com/panicbit/rustbook-de).\
+Dieser Vortrag wird sonst zu lang!
 
 # Do you have OOP?
 
@@ -363,29 +401,8 @@ impl Point {
  * `self` : Kurz für `self:Self`, konsumiert
  * `&self` : Read-only
  * `&mut self` : Read-Write
+ * mehr später
 
-## Drop
-
-```rust-norun
-struct Point { x: i32, y: i32}
-
-impl Point {
-    fn Drop(self) {
-    }
-}
-```
-
-## Drop (more)
-
-```rust-norun
-struct Point { x: i32, y: i32, internal: *mut () }
-
-impl Point {
-    fn Drop(self) {
-        free_void_pointer(self.internal);
-    }
-}
-```
 
 
 # Sicher, schnell, wie?
@@ -521,6 +538,29 @@ fn consume(v: Vec<String>) -> String {
 fn read(v: &Vec<String>) -> String { ... }
 fn modify(v: &mut Vec<String>, name: &str) { ... }
 fn consume(v: Vec<String>) -> String { ... }
+```
+
+## Drop
+
+```rust-norun
+struct Point { x: i32, y: i32}
+
+impl Point {
+    fn Drop(self) {
+    }
+}
+```
+
+## Drop (more)
+
+```rust-norun
+struct Point { x: i32, y: i32, internal: *mut () }
+
+impl Point {
+    fn Drop(self) {
+        free_void_pointer(self.internal);
+    }
+}
 ```
 
 # Control Flow

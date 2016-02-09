@@ -76,18 +76,16 @@
 <li>statisch kompiliert <em>LLVM</em></li>
 <li>schnell</li>
 <li>kein garbage-collector</li>
-<li>Generics</li>
+<li>Generics, besser</li>
 <li>zero cost abstractions</li>
 <li><strong>low level</strong></li>
 </ul>
 </section><section id="wie-haskell" class="slide level2">
 <h1>wie haskell</h1>
 <ul>
-<li>streng getypt</li>
-<li>Hindley-Milner type system</li>
+<li>Typesystem</li>
 <li>Immutable Variablen</li>
 <li>Pattern Matching</li>
-<li>lambda-Ausdrücke/Closures</li>
 </ul>
 </section><section id="wie-ruby-oder-python" class="slide level2">
 <h1>wie ruby oder python</h1>
@@ -95,13 +93,15 @@
 <li>expressive Syntax</li>
 <li>gut zu lesen</li>
 <li>Build system und Packetmanager (cargo &amp; crates.io)</li>
+<li><code>Self</code>stVerständnis</li>
+<li>lambda-Ausdrücke/Closures</li>
 </ul>
 </section><section id="wie-rust-eben" class="slide level2">
 <h1>wie rust eben!</h1>
 <ul>
 <li><strong>borrow checker</strong></li>
 <li>lifetimes Syntax</li>
-<li>sehr explizit</li>
+<li>sehr explizit: no overloading, no default parameters, no exceptions</li>
 </ul>
 </section><section id="einflüße" class="slide level2">
 <h1>Einflüße</h1>
@@ -290,14 +290,42 @@ fn main(){
 <pre class="rust-norun"><code>fn main(){
   let one = 1u32;
   let fourtytwo= 0b101010;
-  let goku = 9_001;
+  let goku = 9_001u64;
   let ladies = (&quot;x&quot;,&quot;y&quot;);
 }</code></pre>
+</section><section id="strings" class="slide level2">
+<h1>Strings</h1>
+<pre class="rust-norun"><code>let string_slice:&amp;str   = &quot;hello world&quot;;
+let owned_string:String = string_slice.to_string();
+
+fn say_some(message:&amp;str){
+  println!(&quot;{:?}&quot;, message);
+}
+
+say_some(&amp;owned_string);</code></pre>
+<div class="fragment">
+<pre class="rust-norun"><code>let owned_string:String = string_slice.to_owned();
+let owned_string:String = string_slice.into();
+let owned_string:String = String::from(string_slice);</code></pre>
+</div>
+</section><section id="lifetimes" class="slide level2">
+<h1>lifetimes</h1>
+<pre class="rust-norun"><code>// implicit
+fn foo(x: &amp;i32) {
+}
+
+// explicit
+fn bar&lt;&#39;a&gt;(x: &amp;&#39;a i32) {
+}</code></pre>
+<p><a href="http://doc.rust-lang.org/stable/book/lifetimes.html">RTFM</a></p>
 </section><section id="pointers" class="slide level2">
 <h1>Pointers</h1>
 <pre class="rust-norun"><code>fn main(){
-  let sushi = Box::new((&quot;rice&quot;, &quot;fish&quot;));
+  let sushi = Box::new((&quot;rice&quot;, &quot;fish&quot;)); // like unique pointer
 }</code></pre>
+</section><section id="stop-already" class="slide level2">
+<h1>Stop already!!!</h1>
+<p>Es gibt ein tolles <a href="http://doc.rust-lang.org/stable/book/">Buch</a>, sogar auf <a href="https://github.com/panicbit/rustbook-de">deutsch</a>.<br />Dieser Vortrag wird sonst zu lang!</p>
 </section></section>
 <section><section id="do-you-have-oop" class="titleslide slide level1"><h1>Do you have OOP?</h1></section><section id="pepsi-ok" class="slide level2">
 <h1>pepsi ok?</h1>
@@ -351,24 +379,8 @@ impl Point {
 <li><code>self</code> : Kurz für <code>self:Self</code>, konsumiert</li>
 <li><code>&amp;self</code> : Read-only</li>
 <li><code>&amp;mut self</code> : Read-Write</li>
+<li>mehr später</li>
 </ul>
-</section><section id="drop" class="slide level2">
-<h1>Drop</h1>
-<pre class="rust-norun"><code>struct Point { x: i32, y: i32}
-
-impl Point {
-    fn Drop(self) {
-    }
-}</code></pre>
-</section><section id="drop-more" class="slide level2">
-<h1>Drop (more)</h1>
-<pre class="rust-norun"><code>struct Point { x: i32, y: i32, internal: *mut () }
-
-impl Point {
-    fn Drop(self) {
-        free_void_pointer(self.internal);
-    }
-}</code></pre>
 </section></section>
 <section><section id="sicher-schnell-wie" class="titleslide slide level1"><h1>Sicher, schnell, wie?</h1></section><section id="memory-model" class="slide level2">
 <h1>Memory Model</h1>
@@ -486,6 +498,23 @@ let v_ref:&amp;mut Vec&lt;i32&gt; = &amp;mut v;</code></pre>
 fn modify(v: &amp;mut Vec&lt;String&gt;, name: &amp;str) { ... }
 fn consume(v: Vec&lt;String&gt;) -&gt; String { ... }</code></pre>
 </div>
+</section><section id="drop" class="slide level2">
+<h1>Drop</h1>
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32}
+
+impl Point {
+    fn Drop(self) {
+    }
+}</code></pre>
+</section><section id="drop-more" class="slide level2">
+<h1>Drop (more)</h1>
+<pre class="rust-norun"><code>struct Point { x: i32, y: i32, internal: *mut () }
+
+impl Point {
+    fn Drop(self) {
+        free_void_pointer(self.internal);
+    }
+}</code></pre>
 </section></section>
 <section><section id="control-flow" class="titleslide slide level1"><h1>Control Flow</h1></section><section id="what-if" class="slide level2">
 <h1>what if?</h1>
@@ -527,7 +556,7 @@ if x == 5 {
   let list = vec![&quot;dog&quot;, &quot;cat&quot;, &quot;mouse&quot;, &quot;cheese&quot;, &quot;Lactobacillales&quot;];
 
   for i in list {
-      print!(&quot;{} chases &quot;, i);
+      print!(&quot;{} -&gt; &quot;, i);
   }
 }</code></pre>
 </section><section id="expressions-vs-statements" class="slide level2">
