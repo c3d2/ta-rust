@@ -169,6 +169,11 @@ $ cargo run --example random_player
 * Libraries: `src/**/lib.rs`
 * Binaries: `src/bin/*.rs`
 
+## Mehr Tooling
+
+* `clippy`: 100 more Warnings
+* `racer`: Completion
+
 ## Wie teste ich meine lib?
 
 . . .
