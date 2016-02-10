@@ -259,6 +259,31 @@ let _range: Vec<i32> = (0..10).collect();
 }
 ```
 
+## Arrays
+
+* Typ `[u8; 4]` hat konstante Länge
+*   Initialisierung:
+    * `[1, 2, 3, 4]`
+    * `[0; 4]`
+
+## Slices
+
+```rust
+fn fill(slice: &mut [i32], c: i32) {
+  for s in slice.iter_mut() {
+    *s = c;
+  }
+}
+
+fn main() {
+  let mut list = vec![1,2,3,4];
+  fill(&mut list[1..3], 23);
+  println!("List: {:?}", list);
+}
+```
+
+Analog: `&str` für `String`
+
 ## Options
 ```rust-norun
 pub enum Option<T> {
