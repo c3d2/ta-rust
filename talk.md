@@ -239,6 +239,25 @@ fn main(){
 
 # Datentypen
 
+## Primitive
+
+```rust-norun
+  let goku:u64 = 9001;     // expliziter Typ
+  let goku = 9_001;        // impliziter Typ
+  let goku = 9_001u64;     // suffix Form
+
+  let fourtytwo= 0b101010; // Binäre Form
+  let ladies = ("x",'y');  //Tuple, `&str` und `char`
+```
+
+## Arrays
+
+```rust-norun
+// hat konstante Länge
+let four_byte:[u8; 4] = [1, 2, 3, 4];
+let four_byte = [0; 4]; // -> [0,0,0,0]
+```
+
 ## Vectors
 
 ```rust
@@ -258,13 +277,6 @@ let _list2 = {
 let _range: Vec<i32> = (0..10).collect();
 }
 ```
-
-## Arrays
-
-* Typ `[u8; 4]` hat konstante Länge
-*   Initialisierung:
-    * `[1, 2, 3, 4]`
-    * `[0; 4]`
 
 ## Slices
 
@@ -304,17 +316,6 @@ fn divide(a:i32, b:i32) -> Option<i32>{
 fn main(){
   println!("12/3 = {:?}", divide(12,3));
   println!("12/0 = {:?}", divide(12,0));
-}
-```
-
-## Primitive
-
-```rust-norun
-fn main(){
-  let one = 1u32;
-  let fourtytwo= 0b101010;
-  let goku = 9_001u64;
-  let ladies = ("x","y");
 }
 ```
 
