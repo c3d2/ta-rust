@@ -169,11 +169,6 @@ $ cargo run --example random_player
 * Libraries: `src/**/lib.rs`
 * Binaries: `src/bin/*.rs`
 
-## Mehr Tooling
-
-* `clippy`: 100 more Warnings
-* `racer`: Completion
-
 ## Wie teste ich meine lib?
 
 . . .
@@ -1071,6 +1066,11 @@ fn main() {
 * [The Rust Programming Language](http://doc.rust-lang.org/stable/book/)
 * [The little book of Rust Macros](https://danielkeep.github.io/tlborm/)
 * [Rustonomicon: Dark Arts of unsafe rust](https://doc.rust-lang.org/nightly/nomicon/)
+
+## Mehr Tooling
+
+* `clippy`: 100 more Warnings
+* `racer`: Completion
 
 # Stop! hacking time
 
