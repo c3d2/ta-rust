@@ -1012,6 +1012,49 @@ fn print_area<T: HasArea>(shape: T) {
 }
 ```
 
+## Iterator trait
+
+[std::iter::Iterator](http://doc.rust-lang.org/stable/std/iter/trait.Iterator.htm)
+
+```rust-norun
+pub trait Iterator {
+    type Item;
+    fn next(&mut self) -> Option<Self::Item>;
+
+    /* ... */
+    fn collect<B>(self) -> B where B: FromIterator<Self::Item>;
+}
+```
+
+## for-Loops
+
+```rust-norun
+pub trait IntoIterator where Self::IntoIter::Item == Self::Item {
+    type Item;
+    type IntoIter: Iterator;
+    fn into_iter(self) -> Self::IntoIter;
+}
+```
+
+## Deref-Coercions
+
+> If you have a type U, and it implements Deref&lt;Target=T&gt;,
+> values of &U will automatically coerce to a &T
+
+```rust
+fn foo(s: &str) {
+  println!("&str: {}", s);
+}
+
+fn main() {
+  // String implements Deref<Target=str>
+  let owned = "Hello".to_string();
+
+  // therefore, this works:
+  foo(&owned);
+}
+```
+
 # eco system
 
 ## Links
