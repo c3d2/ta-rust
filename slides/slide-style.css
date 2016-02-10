@@ -13,9 +13,7 @@
 
 pre code ,
 .reveal pre code {
-  color: #000000;
-  background-color: white;
-  font-size:0.9em !important;
+  font-size:0.8em !important;
 }
 
 .reveal pre code {
