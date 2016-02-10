@@ -1,13 +1,10 @@
 % Rust
 % hoodie und astro
 % 10. Februar 2016
-
+ 
+<img src="../rust-logo-wht.svg" width="75%" />
 
 # Part 1 - Die Sprache
-
----
-
-<!-- vim:set nospell: -->
 
 # Was ist Rust?
 
@@ -16,7 +13,9 @@
 * entwickelt von Mozilla, seit 2007
 * stabil seit Mai 2015
 
-## Beispiele:
+<img src="../hello.svg" width="40%" />
+
+## Was ist in Rust?
 
 * Servo *(super cool fast browser engine)*
 * machine learning tools ([leaf](https://github.com/autumnai/leaf), [rustlearn](https://github.com/maciejkula/rustlearn))
@@ -67,6 +66,7 @@ und doch ganz anders
 * lifetimes Syntax
 * sehr explizit: no overloading, no default parameters, no exceptions
 
+<img src="../jump.svg" width="40%" />
 
 ## Einflüße
 
@@ -90,7 +90,7 @@ siehe: [influences](http://doc.rust-lang.org/reference.html#appendix-influences)
 
 ## Achtung, Werbung
 
----
+<img src="../shy.svg" width="40%" />
 
 ## Sicherheit
 
@@ -178,6 +178,8 @@ fn main(){
   println!("hello world");
 }
 ```
+
+<img src="../hello.svg" width="40%" />
 
 . . .
 
@@ -332,7 +334,9 @@ Dieser Vortrag wird sonst zu lang!
 
 ## pepsi ok?
 
-. . .
+---
+
+## basics
 
 ### structs
 
@@ -394,7 +398,8 @@ impl Point {
 }
 ```
 
-[copy constructor](http://doc.rust-lang.org/stable/std/convert/)
+[copy constructor?](http://doc.rust-lang.org/stable/std/convert/)
+
 
 ## self? so wie in python?
 
@@ -403,7 +408,7 @@ impl Point {
  * `&mut self` : Read-Write
  * mehr später
 
-
+<img src="../happy.svg" width="50%" style="float:right" />
 
 # Sicher, schnell, wie?
 
@@ -540,6 +545,7 @@ fn modify(v: &mut Vec<String>, name: &str) { ... }
 fn consume(v: Vec<String>) -> String { ... }
 ```
 
+
 ## Drop
 
 ```rust-norun
@@ -550,6 +556,8 @@ impl Point {
     }
 }
 ```
+
+<img src="../hang.svg" width="75%" style="float:right" />
 
 ## Drop (more)
 
@@ -672,6 +680,10 @@ int main(){
 
     Streuselkuchen Windbeutel Nein Danke
 
+## 
+
+<img src="../fallover.svg" width="75%" />
+
 ## Matching
 
 ```rust-norun
@@ -707,6 +719,11 @@ match 'f' {
 }
 ```
 
+## 
+
+<img src="../jump.svg" width="75%" />
+
+
 ## if let
 
 ```rust-norun
@@ -718,6 +735,8 @@ if let Err(error) = result {
 // result: Ok(T), keinesfalls Err(E)
 let result = result.unwrap();
 ```
+
+<img src="../hello.svg" width="50%" />
 
 # Y U NO parallel?
 

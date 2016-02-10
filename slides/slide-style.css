@@ -49,6 +49,12 @@ div.screen_grab img {
     height: auto;
 }
 
+.reveal section img
+{
+  border:0px;
+  background:none;
+  box-shadow:none;
+}
 .reveal .slides>section,
 .reveal .slides>section>section {
     padding: 0;

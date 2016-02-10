@@ -37,19 +37,20 @@
   <h3 class="date">10. Februar 2016</h3>
 </section>
 
-<section><section id="part-1---die-sprache" class="titleslide slide level1"><h1>Part 1 - Die Sprache</h1></section><section class="slide level2">
+<section class="slide level2">
 
-<!-- vim:set nospell: -->
-
-</section></section>
+<p><img src="../rust-logo-wht.svg" width="75%" /></p>
+</section>
+<section><section id="part-1---die-sprache" class="titleslide slide level1"><h1>Part 1 - Die Sprache</h1></section></section>
 <section><section id="was-ist-rust" class="titleslide slide level1"><h1>Was ist Rust?</h1></section><section id="eine-programmiersprache" class="slide level2">
 <h1>eine Programmiersprache!</h1>
 <ul>
 <li>entwickelt von Mozilla, seit 2007</li>
 <li>stabil seit Mai 2015</li>
 </ul>
-</section><section id="beispiele" class="slide level2">
-<h1>Beispiele:</h1>
+<p><img src="../hello.svg" width="40%" /></p>
+</section><section id="was-ist-in-rust" class="slide level2">
+<h1>Was ist in Rust?</h1>
 <ul>
 <li>Servo <em>(super cool fast browser engine)</em></li>
 <li>machine learning tools (<a href="https://github.com/autumnai/leaf">leaf</a>, <a href="https://github.com/maciejkula/rustlearn">rustlearn</a>)</li>
@@ -103,6 +104,7 @@
 <li>lifetimes Syntax</li>
 <li>sehr explizit: no overloading, no default parameters, no exceptions</li>
 </ul>
+<p><img src="../jump.svg" width="40%" /></p>
 </section><section id="einflüße" class="slide level2">
 <h1>Einflüße</h1>
 <ul>
@@ -125,6 +127,7 @@
 </section></section>
 <section><section id="features" class="titleslide slide level1"><h1>Features</h1></section><section id="achtung-werbung" class="slide level2">
 <h1>Achtung, Werbung</h1>
+<p><img src="../shy.svg" width="40%" /></p>
 </section><section id="sicherheit" class="slide level2">
 <h1>Sicherheit</h1>
 <ul>
@@ -205,11 +208,12 @@ $ cargo run --example random_player</code></pre>
 <h3 id="life">LIFE</h3>
 </div>
 </section></section>
-<section><section id="beispiele-1" class="titleslide slide level1"><h1>Beispiele</h1></section><section id="hello-world" class="slide level2">
+<section><section id="beispiele" class="titleslide slide level1"><h1>Beispiele</h1></section><section id="hello-world" class="slide level2">
 <h1>Hello world</h1>
 <pre class="rust"><code>fn main(){
   println!(&quot;hello world&quot;);
 }</code></pre>
+<p><img src="../hello.svg" width="40%" /></p>
 <div class="fragment">
 <p>Vorsicht, Macro!</p>
 </div>
@@ -329,7 +333,8 @@ fn bar&lt;&#39;a&gt;(x: &amp;&#39;a i32) {
 </section></section>
 <section><section id="do-you-have-oop" class="titleslide slide level1"><h1>Do you have OOP?</h1></section><section id="pepsi-ok" class="slide level2">
 <h1>pepsi ok?</h1>
-<div class="fragment">
+</section><section id="basics" class="slide level2">
+<h1>basics</h1>
 <h3 id="structs">structs</h3>
 <pre class="rust-norun"><code>struct Love;                    // unit struct
 struct Point ( i32, i32 );      // tuple struct
@@ -342,7 +347,6 @@ struct Point { x: i32, y: i32 } // as you know from C</code></pre>
     Write(String),
 }</code></pre>
 <p><a href="http://doc.rust-lang.org/stable/book/structs.html">more</a> <a href="http://doc.rust-lang.org/stable/book/structs.html">more</a></p>
-</div>
 </section><section id="impl" class="slide level2">
 <h1>Impl</h1>
 <pre class="rust-norun"><code>struct Point { x: i32, y: i32 }
@@ -371,7 +375,7 @@ impl Point {
       Point { x: x, y: y, ..Point::new()) }
     }
 }</code></pre>
-<p><a href="http://doc.rust-lang.org/stable/std/convert/">copy constructor</a></p>
+<p><a href="http://doc.rust-lang.org/stable/std/convert/">copy constructor?</a></p>
 </div>
 </section><section id="self-so-wie-in-python" class="slide level2">
 <h1>self? so wie in python?</h1>
@@ -381,6 +385,7 @@ impl Point {
 <li><code>&amp;mut self</code> : Read-Write</li>
 <li>mehr später</li>
 </ul>
+<p><img src="../happy.svg" width="50%" style="float:right" /></p>
 </section></section>
 <section><section id="sicher-schnell-wie" class="titleslide slide level1"><h1>Sicher, schnell, wie?</h1></section><section id="memory-model" class="slide level2">
 <h1>Memory Model</h1>
@@ -506,6 +511,7 @@ impl Point {
     fn Drop(self) {
     }
 }</code></pre>
+<p><img src="../hang.svg" width="75%" style="float:right" /></p>
 </section><section id="drop-more" class="slide level2">
 <h1>Drop (more)</h1>
 <pre class="rust-norun"><code>struct Point { x: i32, y: i32, internal: *mut () }
@@ -593,6 +599,9 @@ if x == 5 {
 <div class="fragment">
 <pre><code>Streuselkuchen Windbeutel Nein Danke</code></pre>
 </div>
+</section><section id="section" class="slide level2">
+<h1></h1>
+<p><img src="../fallover.svg" width="75%" /></p>
 </section><section id="matching" class="slide level2">
 <h1>Matching</h1>
 <pre class="rust-norun"><code>let auswahl = 2;
@@ -616,6 +625,9 @@ match origin {
     &#39;k&#39; ... &#39;z&#39; =&gt; println!(&quot;late letter&quot;),
     _ =&gt; println!(&quot;something else&quot;),
 }</code></pre>
+</section><section id="section-1" class="slide level2">
+<h1></h1>
+<p><img src="../jump.svg" width="75%" /></p>
 </section><section id="if-let" class="slide level2">
 <h1>if let</h1>
 <pre class="rust-norun"><code>// result: enum Option&lt;T, E&gt; { Ok(T), Err(E) }
@@ -625,6 +637,7 @@ if let Err(error) = result {
 }
 // result: Ok(T), keinesfalls Err(E)
 let result = result.unwrap();</code></pre>
+<p><img src="../hello.svg" width="50%" /></p>
 </section></section>
 <section><section id="y-u-no-parallel" class="titleslide slide level1"><h1>Y U NO parallel?</h1></section><section id="data-races" class="slide level2">
 <h1>Data Races?</h1>
