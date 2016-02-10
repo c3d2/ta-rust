@@ -46,6 +46,12 @@ und doch ganz anders
 * zero cost abstractions
 * **low level**
 
+## wie go
+
+* jung
+* effizient
+* googlebar
+
 ## wie haskell
 
 * Typesystem
