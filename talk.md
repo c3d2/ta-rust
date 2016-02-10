@@ -74,7 +74,7 @@ und doch ganz anders
 
 <img src="../jump.svg" width="40%" />
 
-## Einflüße
+## Einflüsse
 
 * **SML, OCaml:** algebraic data types, pattern matching, type inference, semicolon statement separation
 * **C++:** references, RAII, smart pointers, move semantics, monomorphization, memory model
@@ -82,7 +82,7 @@ und doch ganz anders
 * **Haskell (GHC):** typeclasses, type families
 * **Newsqueak, Alef, Limbo:** channels, concurrency
 
-## Einflüße
+## Einflüsse
 
 * **Erlang:** message passing, thread failure
 * **Swift:** optional bindings
@@ -1056,14 +1056,14 @@ fn main() {
 
 ### News && Community
 
-* [this-week-in-rust.org/](http://this-week-in-rust.org/)
-* [/r/rust](http://www.reddit.com/r/rust)
-* [users.rust-lang.org](users.rust-lang.org)
+* [this-week-in-rust.org](https://this-week-in-rust.org/)
+* [/r/rust](https://www.reddit.com/r/rust)
+* [users.rust-lang.org](https://users.rust-lang.org)
 
 ### Resources
 
 * [rustbyexample.com/](http://rustbyexample.com/)
-* [The Rust Programming Language](http://doc.rust-lang.org/stable/book/)
+* [The Rust Programming Language](https://doc.rust-lang.org/stable/book/)
 * [The little book of Rust Macros](https://danielkeep.github.io/tlborm/)
 * [Rustonomicon: Dark Arts of unsafe rust](https://doc.rust-lang.org/nightly/nomicon/)
 
