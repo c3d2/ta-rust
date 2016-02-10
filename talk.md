@@ -409,7 +409,9 @@ impl Point {
 }
 ```
 
-[copy constructor?](http://doc.rust-lang.org/stable/std/convert/)
+* [trait Copy](http://doc.rust-lang.org/stable/std/marker/trait.Copy.html)
+* [clone()](http://doc.rust-lang.org/stable/std/clone/trait.Clone.html#tymethod.clone)
+* [std::convert](http://doc.rust-lang.org/stable/std/convert/)
 
 
 ## self? so wie in python?
